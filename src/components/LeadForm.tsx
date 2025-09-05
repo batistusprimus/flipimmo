@@ -5,15 +5,24 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 
-const step1Schema = z.object({ capital: z.string().min(1), situation: z.string().min(1) })
-const step2Schema = z.object({ temps: z.string().min(1), delai: z.string().min(1) })
-const step3Schema = z.object({ motivation: z.string().min(1), experience: z.string().min(1) })
+const step1Schema = z.object({
+  capital: z.string().min(1, { message: 'Champ requis' }),
+  situation: z.string().min(1, { message: 'Champ requis' }),
+})
+const step2Schema = z.object({
+  temps: z.string().min(1, { message: 'Champ requis' }),
+  delai: z.string().min(1, { message: 'Champ requis' }),
+})
+const step3Schema = z.object({
+  motivation: z.string().min(1, { message: 'Champ requis' }),
+  experience: z.string().min(1, { message: 'Champ requis' }),
+})
 const step4Schema = z.object({
-  prenom: z.string().min(2),
-  nom: z.string().min(2),
-  email: z.string().email(),
-  telephone: z.string().min(6),
-  codePostal: z.string().min(4),
+  prenom: z.string().min(2, { message: 'Veuillez entrer au moins 2 caractères' }),
+  nom: z.string().min(2, { message: 'Veuillez entrer au moins 2 caractères' }),
+  email: z.string().email({ message: 'Adresse email invalide' }),
+  telephone: z.string().min(6, { message: 'Veuillez entrer au moins 6 caractères' }),
+  codePostal: z.string().min(4, { message: 'Veuillez entrer au moins 4 caractères' }),
   rgpd: z.literal(true, { message: 'Requis' }),
 })
 
