@@ -8,9 +8,9 @@ export const metadata: Metadata = {
   description:
     "Découvrez le métier de Marchand de Biens : évaluez votre potentiel en 5 minutes et recevez un guide complet gratuit.",
   icons: {
-    icon: "/FliImmologotransparent.png",
-    apple: "/FliImmologotransparent.png",
-    shortcut: "/FliImmologotransparent.png",
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+    shortcut: "/favicon.png",
   },
 };
 
