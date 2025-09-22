@@ -1,5 +1,3 @@
-const CALENDLY_URL = "https://calendly.com/flipimmo/appel-15min";
-
 export default function Page() {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 md:py-20 lg:px-8">
@@ -19,9 +17,9 @@ export default function Page() {
 
       <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-5">
         <div className="md:col-span-3 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#1E3A8A]/10 px-3 py-1 text-xs font-medium text-[#1E3A8A]">15 min • Gratuit • Sans vente</div>
-          <h2 className="mt-3 text-xl font-bold text-slate-900">Réservez un appel d’orientation et repartez avec un plan simple</h2>
-          <p className="mt-2 text-slate-600">En 15 minutes, nous validons la faisabilité de votre projet et vous repartez avec 2–3 actions concrètes pour avancer sereinement.</p>
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#1E3A8A]/10 px-3 py-1 text-xs font-medium text-[#1E3A8A]">Audit offert • 15 min • Sans vente</div>
+          <h2 className="mt-3 text-xl font-bold text-slate-900">Vous serez bientôt appelé pour votre audit offert</h2>
+          <p className="mt-2 text-slate-600">Répondez au téléphone lorsqu’on vous contacte : cela peut vous faire gagner plusieurs mois sur votre projet en évitant les erreurs courantes et en clarifiant vos prochaines étapes.</p>
 
           <ul className="mt-6 grid gap-3">
             <li className="flex items-start gap-3">
@@ -47,25 +45,9 @@ export default function Page() {
             </li>
           </ul>
 
-          <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
-            >
-              Réserver mon appel gratuit
-            </a>
-            <div className="text-xs text-slate-500">Créneaux limités chaque semaine</div>
-          </div>
-
-          <div className="mt-8 overflow-hidden rounded-md border border-slate-200">
-            <iframe
-              title="Calendly - Appel 15 minutes"
-              src={`${CALENDLY_URL}?hide_event_type_details=1&hide_gdpr_banner=1`}
-              className="h-[720px] w-full"
-              frameBorder="0"
-            />
+          <div className="mt-6 rounded-lg bg-amber-50 p-4 text-sm text-amber-900 ring-1 ring-amber-200">
+            <div className="font-medium">Conseil</div>
+            <div className="mt-1">Gardez votre téléphone disponible dans les prochaines heures. Un bref échange nous permettra de valider la faisabilité et de vous donner 2–3 actions concrètes pour avancer plus vite.</div>
           </div>
 
           <div className="mt-6 grid gap-3 rounded-lg bg-slate-50 p-4 text-sm text-slate-700">
@@ -97,30 +79,10 @@ export default function Page() {
             <div><span className="font-semibold text-slate-900">Transparence:</span> il n’y a rien à acheter à la fin de l’appel.</div>
           </div>
 
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-md border border-[#1E3A8A] bg-white px-4 py-2 text-sm font-semibold text-[#1E3A8A] shadow-sm transition hover:bg-[#1E3A8A]/5"
-          >
-            Choisir un créneau
-          </a>
+          
         </aside>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 block border-t border-slate-200 bg-white p-3 shadow-[-4px_0_12px_rgba(0,0,0,0.05)] md:hidden">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3">
-          <div className="text-xs text-slate-600">15 min • Gratuit • Sans vente</div>
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-4 py-2 text-sm font-semibold text-white shadow-sm"
-          >
-            Réserver
-          </a>
-        </div>
-      </div>
     </div>
   )
 }

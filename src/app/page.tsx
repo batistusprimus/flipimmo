@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import Calculator from "@/components/Calculator";
 import FAQ from "@/components/FAQ";
-import LeadForm from "@/components/LeadForm";
+import GhlForm from "@/components/GhlForm";
 
 export default function Home() {
   return (
@@ -84,7 +84,7 @@ export default function Home() {
             </div>
 
             <div className="card p-6 md:order-1 md:col-span-2 shadow-md ring-1 ring-[#1E3A8A]/10 lg:p-8">
-              <LeadForm />
+              <GhlForm />
               <p className="mt-3 text-xs text-slate-500">Vos données sont utilisées uniquement pour vous envoyer le guide et l'évaluation demandés. Elles ne sont jamais transmises à des tiers.</p>
             </div>
           </div>
