@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <p className="mt-2">FlipImmo.fr est un site d'information neutre sur le métier de marchand de biens. Nous fournissons des ressources éducatives pour aider les entrepreneurs à évaluer cette opportunité professionnelle en toute objectivité.</p>
             </div>
             <div className="flex flex-col gap-2">
-              <a href="#" className="hover:text-[#1E3A8A]">Mentions légales</a>
+              <a href="/mentions-legales" className="hover:text-[#1E3A8A]">Mentions légales</a>
               <a href="#" className="hover:text-[#1E3A8A]">Politique de confidentialité</a>
               <a href="#" className="hover:text-[#1E3A8A]">Contact</a>
             </div>
