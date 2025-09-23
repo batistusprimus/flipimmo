@@ -1,6 +1,9 @@
+import Script from "next/script";
+
 export default function Page() {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 md:py-20 lg:px-8">
+      <Script id="meta-lead" strategy="afterInteractive">{`fbq('track', 'Lead');`}</Script>
       <div className="mx-auto max-w-3xl text-center">
         <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
           <span className="text-emerald-600">✓</span>

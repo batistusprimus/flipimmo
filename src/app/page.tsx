@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Script from "next/script";
 
 import Calculator from "@/components/Calculator";
 import FAQ from "@/components/FAQ";
@@ -7,6 +8,7 @@ import GhlForm from "@/components/GhlForm";
 export default function Home() {
   return (
     <div>
+      <Script id="meta-viewcontent" strategy="afterInteractive">{`fbq('track', 'ViewContent');`}</Script>
       <section className="relative overflow-hidden bg-gradient-to-b from-[#1E3A8A]/5 to-transparent">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-[-8rem] h-[28rem] w-[56rem] -translate-x-1/2 rounded-full bg-[#1E3A8A]/10 blur-3xl" />
