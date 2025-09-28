@@ -34,6 +34,15 @@ fbq('track', 'PageView');
         <noscript>
           <img height="1" width="1" style={{ display: "none" }} src="https://www.facebook.com/tr?id=1881006839146788&ev=PageView&noscript=1" />
         </noscript>
+        <Script
+          id="plausible-script"
+          strategy="afterInteractive"
+          data-domain="flipimmo.fr"
+          src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"
+        />
+        <Script id="plausible-init" strategy="afterInteractive">{`
+window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
+        `}</Script>
         <FloatingCTA />
         <Header />
         <main>{children}</main>
