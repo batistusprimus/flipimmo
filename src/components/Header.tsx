@@ -57,7 +57,7 @@ export default function Header() {
                 <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.17l3.71-2.94a.75.75 0 1 1 1.04 1.08l-4.24 3.36a.75.75 0 0 1-.94 0L5.21 8.31a.75.75 0 0 1 .02-1.1z" clipRule="evenodd" />
               </svg>
             </button>
-            <div className="invisible absolute left-0 top-full z-40 mt-2 w-56 rounded-lg border border-slate-200 bg-white p-2 text-sm text-slate-700 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
+            <div className="invisible absolute left-0 top-full z-40 w-56 rounded-lg border border-slate-200 bg-white p-2 text-sm text-slate-700 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
               <Link href="/faq" className="block rounded-md px-3 py-2 hover:bg-slate-50">FAQ</Link>
               <Link href="/outils-gratuits" className="block rounded-md px-3 py-2 hover:bg-slate-50">Outils</Link>
               <Link href="/ressources" className="block rounded-md px-3 py-2 hover:bg-slate-50">Ressources</Link>
