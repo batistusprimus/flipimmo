@@ -73,7 +73,7 @@ export default function FormationGratuitePage() {
         <p className="mt-2 max-w-3xl text-slate-700">Entrez simplement votre prénom et votre adresse email. Le guide PDF vous sera envoyé immédiatement.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-            <SimpleDownloadForm />
+            <ClientSimpleDownloadForm />
             <p className="mt-3 text-xs text-slate-500">100% gratuit. En téléchargeant ce guide, vous acceptez de recevoir nos conseils par email. Vous pouvez vous désinscrire à tout moment.</p>
           </div>
           <div className="hidden items-center justify-center rounded-lg border border-slate-200 bg-white p-3 md:flex">
@@ -115,20 +115,6 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   )
 }
 
-function SimpleDownloadForm() {
-  return (
-    <form onSubmit={(e) => { e.preventDefault(); window.location.href = '/merci' }} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-slate-700">Prénom</label>
-        <input required className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2" />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-slate-700">Adresse email</label>
-        <input required type="email" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2" />
-      </div>
-      <button type="submit" className="btn-primary inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">Recevoir la Formation Gratuitement</button>
-    </form>
-  )
-}
+import ClientSimpleDownloadForm from '@/components/SimpleDownloadForm'
 
 
