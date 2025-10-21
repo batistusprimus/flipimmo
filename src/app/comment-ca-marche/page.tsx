@@ -1,3 +1,8 @@
+import Image from 'next/image'
+import Etape1 from '../../../public/Visuels/étape 1.png'
+import Etape2 from '../../../public/Visuels/Étape 2.png'
+import Etape3 from '../../../public/Visuels/Étape 3.png'
+
 export const metadata = {
   title: 'Comment Ça Marche | FlipImmo',
   description: "Découvrez notre processus simple et transparent en 3 étapes.",
@@ -25,6 +30,13 @@ export default function CommentCaMarchePage() {
               <svg aria-hidden="true" viewBox="0 0 20 20" className="ml-2 h-4 w-4"><path fill="currentColor" d="M7 10a1 1 0 0 1 1-1h5.586l-1.293-1.293A1 1 0 0 1 13.707 6.293l3 3a1 1 0 0 1 0 1.414l-3 3A1 1 0 0 1 12.293 12.293L13.586 11H8a1 1 0 0 1-1-1Z"/></svg>
             </a>
           </div>
+          <Image
+            src={Etape1}
+            alt="Illustration étape 1"
+            className="pointer-events-none select-none absolute -right-6 bottom-2 hidden h-auto w-40 opacity-95 sm:block md:w-56"
+            sizes="(min-width: 640px) 14rem, 0px"
+            priority
+          />
         </div>
         <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 shadow-sm">
           <div className="text-sm font-semibold text-slate-800">Votre progression</div>
@@ -53,7 +65,7 @@ export default function CommentCaMarchePage() {
       </section>
 
       {/* Étape 2 */}
-      <section className="mt-10 overflow-hidden rounded-xl border border-slate-200 bg-white/90 p-6 shadow-sm ring-1 ring-slate-200">
+      <section className="mt-10 overflow-hidden rounded-xl border border-slate-200 bg-white/90 p-6 shadow-sm ring-1 ring-slate-200 relative">
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500" aria-hidden="true" />
         <div className="inline-flex items-center gap-2 text-xs font-medium text-[#1E3A8A]"><span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#1E3A8A] text-[11px] font-bold text-white">2</span> Étape 2</div>
         <h2 className="mt-2 text-xl font-semibold text-slate-900">Qualifier Son Projet</h2>
@@ -63,10 +75,16 @@ export default function CommentCaMarchePage() {
             <svg aria-hidden="true" viewBox="0 0 20 20" className="ml-2 h-4 w-4"><path fill="currentColor" d="M7 10a1 1 0 0 1 1-1h5.586l-1.293-1.293A1 1 0 0 1 13.707 6.293l3 3a1 1 0 0 1 0 1.414l-3 3A1 1 0 0 1 12.293 12.293L13.586 11H8a1 1 0 0 1-1-1Z"/></svg>
           </a>
         </div>
+        <Image
+          src={Etape2}
+          alt="Illustration étape 2"
+          className="pointer-events-none select-none absolute -right-4 bottom-2 hidden h-auto w-40 opacity-95 sm:block md:w-56"
+          sizes="(min-width: 640px) 14rem, 0px"
+        />
       </section>
 
       {/* Étape 3 */}
-      <section className="mt-10 overflow-hidden rounded-xl border border-slate-200 bg-white/90 p-6 shadow-sm ring-1 ring-slate-200">
+      <section className="mt-10 overflow-hidden rounded-xl border border-slate-200 bg-white/90 p-6 shadow-sm ring-1 ring-slate-200 relative">
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-fuchsia-500 via-rose-500 to-orange-500" aria-hidden="true" />
         <div className="inline-flex items-center gap-2 text-xs font-medium text-[#1E3A8A]"><span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#1E3A8A] text-[11px] font-bold text-white">3</span> Étape 3</div>
         <h2 className="mt-2 text-xl font-semibold text-slate-900">Parler à un Expert</h2>
@@ -76,6 +94,12 @@ export default function CommentCaMarchePage() {
             <svg aria-hidden="true" viewBox="0 0 20 20" className="ml-2 h-4 w-4"><path fill="currentColor" d="M7 10a1 1 0 0 1 1-1h5.586l-1.293-1.293A1 1 0 0 1 13.707 6.293l3 3a1 1 0 0 1 0 1.414l-3 3A1 1 0 0 1 12.293 12.293L13.586 11H8a1 1 0 0 1-1-1Z"/></svg>
           </a>
         </div>
+        <Image
+          src={Etape3}
+          alt="Illustration étape 3"
+          className="pointer-events-none select-none absolute -right-4 bottom-2 hidden h-auto w-44 opacity-95 sm:block md:w-64"
+          sizes="(min-width: 640px) 16rem, 0px"
+        />
       </section>
 
       {/* Garanties */}

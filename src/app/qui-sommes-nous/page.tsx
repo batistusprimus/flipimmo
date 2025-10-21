@@ -28,7 +28,7 @@ export default function QuiSommesNousPage() {
         <h2 className="text-xl font-semibold text-slate-900">Rencontrez Jean De Villiers</h2>
         <div className="mt-4 grid gap-6 md:grid-cols-3">
           <div className="md:col-span-1">
-            <img src="/Visuels/Jean%20De%20Villiers.png" alt="Jean De Villiers" loading="lazy" className="h-auto w-full rounded-md border object-cover" />
+            <img src="/Visuels/JDV.png" alt="Jean De Villiers" loading="lazy" className="h-auto w-full rounded-md border object-cover" />
           </div>
           <div className="md:col-span-2">
             <blockquote className="border-l-2 border-slate-200 pl-4 text-sm text-slate-700">"Pendant 10 ans, j'ai été à votre place. [...] Le succès ne tient pas à la chance, mais à la méthode, la rigueur et la qualité de l'information."</blockquote>

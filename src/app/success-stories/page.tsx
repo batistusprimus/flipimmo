@@ -95,7 +95,7 @@ export default function SuccessStoriesPage() {
         <h2 className="text-xl font-semibold text-slate-900">Étude de Cas 3 : Premier Achat-Revente à Lille avec un Petit Budget</h2>
         <p className="mt-2 text-sm text-slate-700">Se lancer avec 10 000€ d'apport : démonstration de l'effet de levier.</p>
         <div className="mt-4">
-          <img src="/Visuels/rvOy-7Dd2VwGCn0ddvSCh.png" alt="Infographie effet de levier" loading="lazy" className="max-h-80 w-auto rounded-md border object-contain" />
+          <img src="/Visuels/ETC3.png" alt="Étude de cas 3 (avant/après)" loading="lazy" className="max-h-80 w-auto rounded-md border object-contain" />
         </div>
         <div className="mt-4 overflow-x-auto">
           <table className="min-w-[640px] text-left text-sm">
