@@ -10,10 +10,7 @@ export default function ParlerAUnExpertPage() {
       <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-[#1E3A8A] to-[#F59E0B] bg-clip-text text-transparent">Parlons de Votre Projet avec un Expert Certifié</h1>
       <p className="mt-2 max-w-3xl text-slate-700">Vous avez un projet de marchand de biens mais vous ne savez pas par où commencer ? Remplissez notre questionnaire en 5 minutes. Nous analysons votre profil et vous mettons en relation avec l'organisme de formation le plus adapté. Un expert vous contacte sous 24 à 48h.</p>
 
-      {/* Visuel héro */}
-      <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
-        <img src="/Visuels/expert.png" alt="Échange avec un expert" loading="lazy" className="h-auto w-full object-cover" />
-      </div>
+      {/* Visuel héro supprimé à la demande */}
 
       {/* Timeline des 3 étapes */}
       <section className="mt-10 grid gap-6 md:grid-cols-3">
