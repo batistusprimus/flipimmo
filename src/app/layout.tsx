@@ -54,8 +54,8 @@ window.plausible = window.plausible || function() { (window.plausible.q = window
             </div>
             <div className="flex flex-col gap-2">
               <a href="/mentions-legales" className="hover:text-[#1E3A8A]">Mentions légales</a>
-              <a href="#" className="hover:text-[#1E3A8A]">Politique de confidentialité</a>
-              <a href="#" className="hover:text-[#1E3A8A]">Contact</a>
+              <a href="/politique-de-confidentialite" className="hover:text-[#1E3A8A]">Politique de confidentialité</a>
+              <a href="/contact" className="hover:text-[#1E3A8A]">Contact</a>
             </div>
             <div className="md:text-right">© {new Date().getFullYear()} FlipImmo.fr - Tous droits réservés</div>
           </div>

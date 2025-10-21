@@ -10,6 +10,223 @@ export type BlogPost = {
 // KISS: on stocke le contenu en HTML minimal pour un rendu rapide côté client
 export const posts: BlogPost[] = [
   {
+    slug: "combien-gagne-vraiment-un-marchand-de-biens-en-2025",
+    title: "Combien Gagne VRAIMENT un Marchand de Biens en 2025 ?",
+    date: "2025-10-21",
+    excerpt:
+      "Pas de salaire fixe, mais des marges. Découvrez combien gagne réellement un marchand de biens, avec des exemples de calculs concrets, les facteurs qui influencent les revenus et le potentiel de ce métier entrepreneurial.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>Combien Gagne VRAIMENT un Marchand de Biens en 2025 ?</h2>
+<p>Pas de salaire fixe, mais des marges. Découvrez combien gagne réellement un marchand de biens, avec des exemples de calculs concrets, les facteurs qui influencent les revenus et le potentiel de ce métier entrepreneurial.</p>
+<p>C’est souvent la première question que l’on se pose lorsque l’on s’intéresse au métier de marchand de biens : combien peut-on espérer gagner ? Oubliez la notion de salaire mensuel ; un marchand de biens est un entrepreneur, et sa rémunération est directement liée à la performance de ses opérations.</p>
+<h3>Pas de salaire, mais des marges</h3>
+<p>Un marchand de biens ne perçoit pas de salaire. Sa rémunération provient de la marge qu'il réalise sur chaque opération d'achat-revente. La marge nette, c’est ce qu’il reste dans la société après impôt.</p>
+<h3>Ordre de grandeur</h3>
+<ul>
+  <li>Première opération (appartement) : marge nette typique 20 000 € à 34 000 €.</li>
+  <li>Opérations plus complexes (division, immeuble) : marges brutes 50 000 € à 100 000 €+.</li>
+  <li>3 à 4 opérations/an permettent d’atteindre 100 000 € nets annuels et plus.</li>
+  <li>Rémunération via dividendes (souvent) ou salaire (plus chargé).</li>
+  <li>Facteurs clés : financement, marché, efficacité travaux, réseau.</li>
+  </ul>
+<p>Le métier offre un fort potentiel, proportionnel au professionnalisme et à la capacité d’exécution.</p>
+<p><strong>Aller plus loin :</strong> formation gratuite et prise de rendez-vous avec un expert disponibles depuis le site.</p>
+`,
+  },
+  {
+    slug: "comment-choisir-sa-formation-de-marchand-de-biens-guide-ultime",
+    title: "Comment Choisir sa Formation de Marchand de Biens : Le Guide Ultime",
+    date: "2025-10-21",
+    excerpt:
+      "Le marché de la formation de marchand de biens est une jungle. Grille d'analyse en 7 critères pour choisir la bonne formation et réussir.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>Comment Choisir sa Formation de Marchand de Biens : Le Guide Ultime</h2>
+<p>Se lancer sans se former est une erreur coûteuse. Ce guide propose une grille d’analyse en 7 critères pour évaluer n’importe quelle formation et investir dans celle qui vous mènera au succès.</p>
+<h3>Les 7 critères clés</h3>
+<ul>
+  <li>Formateur en activité, opérations récentes et vérifiables.</li>
+  <li>Programme complet et détaillé (juridique, fiscal, financement, travaux, sourcing).</li>
+  <li>Certification Qualiopi et sérieux administratif.</li>
+  <li>Accompagnement réel (coaching, réponses sous 24h, relectures).</li>
+  <li>Communauté active d’anciens élèves.</li>
+  <li>Preuve sociale authentique (témoignages, cas chiffrés).</li>
+  <li>Options de financement (CPF, paiements échelonnés).</li>
+  </ul>
+<p>Vous êtes le client : soyez exigeant et comparez. Une bonne formation se rentabilise dès la première opération.</p>
+`,
+  },
+  {
+    slug: "comment-devenir-marchand-de-biens-en-2025-guide-complet",
+    title: "Comment Devenir Marchand de Biens en 2025 : Le Guide Complet de A à Z",
+    date: "2025-10-21",
+    excerpt:
+      "Le guide le plus complet pour devenir marchand de biens : 7 étapes, pièges à éviter et plan d’action concret.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>Comment Devenir Marchand de Biens en 2025 : Le Guide Complet de A à Z</h2>
+<p>De l’idée à la première revente, suivez 7 étapes : formation, statut (SAS/SARL), financement pro, sourcing off-market, analyse et négociation, pilotage travaux, commercialisation.</p>
+<h3>Clés de réussite</h3>
+<ul>
+  <li>Se former sérieusement (fiscalité, technique, financement).</li>
+  <li>Créer une structure adaptée et sécuriser sa fiscalité (IS).</li>
+  <li>Monter des dossiers bancaires solides et crédibles.</li>
+  <li>Maîtriser chiffrage, planning et qualité des travaux.</li>
+  <li>Vendre vite et au bon prix (photos pro, mise en scène, pricing).</li>
+  </ul>
+<p>Marathon d’exécution, pas sprint d’improvisation.</p>
+`,
+  },
+  {
+    slug: "comment-trouver-biens-decotes-7-canaux",
+    title: "Comment Trouver des Biens Décotés : 7 Canaux que les Particuliers Ignorent",
+    date: "2025-10-21",
+    excerpt:
+      "Arrêtez de chercher où tout le monde cherche. 7 canaux pour dénicher des biens off-market et créer votre marge à l’achat.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>Comment Trouver des Biens Décotés : 7 Canaux que les Particuliers Ignorent</h2>
+<p>La plus-value se fait à l’achat. Sortez des portails bondés et exploitez ces 7 canaux pour trouver des décotes de 15 à 30 %.</p>
+<ul>
+  <li>Réseau de proximité (devenez l’« expert immo » de votre entourage).</li>
+  <li>Notaires, agents, syndics (flux off-market).</li>
+  <li>Démarchage direct (repérage, courrier ciblé).</li>
+  <li>Ventes aux enchères (préparation extrême requise).</li>
+  <li>Apporteurs d’affaires.</li>
+  <li>Biens à problèmes (techniques, juridiques) = décotes.</li>
+  <li>Division (création de valeur mécanique).</li>
+  </ul>
+<p>Devenez chasseur professionnel, pas simple acheteur.</p>
+`,
+  },
+  {
+    slug: "etude-de-cas-199600-eur-de-marge-immeuble-lisieux",
+    title: "Étude de Cas : 199 600€ de Marge sur un Immeuble à Lisieux",
+    date: "2025-10-21",
+    excerpt:
+      "Décorticage d’une opération réelle : budget, aléas (mérule), stratégie de vente à la découpe et leçons clés.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>Étude de Cas : 199 600€ de Marge sur un Immeuble à Lisieux</h2>
+<p>Immeuble vétuste acheté 160 000 €, travaux lourds (dont traitement de la mérule), vente à la découpe des 7 lots : chiffre d’affaires 730 000 €, marge brute 199 600 €.</p>
+<h3>Leçons</h3>
+<ul>
+  <li>La marge se fait à l’achat (négociation agressive).</li>
+  <li>Provision d’imprévus indispensable.</li>
+  <li>Création de valeur multi-leviers (rénovation + stratégie juridique/commerciale).</li>
+  </ul>
+<p>La méthode prime sur la chance.</p>
+`,
+  },
+  {
+    slug: "financement-marchand-de-biens-guide-credit",
+    title: "Financement Marchand de Biens : Le Guide pour Obtenir Votre Crédit",
+    date: "2025-10-21",
+    excerpt:
+      "Comprendre le crédit pro court terme, les attentes des banques, l’apport et le dossier qui convainc.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>Financement Marchand de Biens : Le Guide pour Obtenir Votre Crédit</h2>
+<p>Crédit professionnel 12 à 24 mois, souvent in fine, garanties fortes. La banque juge l’homme, le projet et les garanties.</p>
+<h3>Points clés</h3>
+<ul>
+  <li>Apport : viser 15 à 20 % du coût total (frais de notaire + partie travaux).</li>
+  <li>Dossier béton : business plan, devis, étude de marché, plan de financement, planning.</li>
+  <li>Interlocuteur : pôle pro / chargé d’affaires entreprises.</li>
+  </ul>
+<p>Préparez-vous comme un chef d’entreprise, pas comme un particulier.</p>
+`,
+  },
+  {
+    slug: "7-erreurs-fatales-marchand-de-biens-debutant",
+    title: "Les 7 Erreurs Fatales du Marchand de Biens Débutant (et Comment les Éviter)",
+    date: "2025-10-21",
+    excerpt:
+      "Budget travaux sous-estimé, frais cachés, fiscalité ignorée… Voici les 7 pièges et comment les éviter.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>Les 7 Erreurs Fatales du Marchand de Biens Débutant</h2>
+<ol>
+  <li>Sous-estimer le budget travaux (ajouter 15 à 20 % d’aléa).</li>
+  <li>Oublier les frais cachés (portage, commercialisation, structure).</li>
+  <li>Négliger la fiscalité (TVA, IS) et le suivi de trésorerie.</li>
+  <li>Acheter au prix du marché (décote cible 15 à 20 % avant travaux).</li>
+  <li>Vouloir tout faire soi-même (votre valeur est dans le pilotage).</li>
+  <li>Ignorer l’étude de marché (liquidité par micro-segment).</li>
+  <li>Manquer de formation et de communauté.</li>
+  </ol>
+<p>Le succès n’est pas une question de chance, mais de méthode.</p>
+`,
+  },
+  {
+    slug: "marchand-de-biens-vs-investisseur-locatif-le-match",
+    title: "Marchand de Biens vs Investisseur Locatif : Le Match pour Votre Liberté Financière",
+    date: "2025-10-21",
+    excerpt:
+      "Deux voies, deux fiscalités, deux vitesses. Choisissez selon votre profil, votre capital et votre appétence au risque.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>Marchand de Biens vs Investisseur Locatif</h2>
+<p>L’investisseur construit un patrimoine et des revenus passifs sur le long terme. Le marchand de biens crée du cash rapide par création de valeur et revente.</p>
+<h3>Différences majeures</h3>
+<ul>
+  <li>Fiscalité : particuliers (IR/plus-value) vs société (IS, TVA).</li>
+  <li>Financement : crédit immo long terme vs crédit pro court terme.</li>
+  <li>Vitesse/risque : lente/faible vs rapide/plus risquée.</li>
+  </ul>
+<p>Choisissez en fonction de votre mindset et de vos objectifs.</p>
+`,
+  },
+  {
+    slug: "sas-ou-sarl-pour-un-marchand-de-biens-comparatif-2025",
+    title: "SAS ou SARL pour un Marchand de Biens : Le Comparatif Ultime 2025",
+    date: "2025-10-21",
+    excerpt:
+      "SAS vs SARL : protection sociale, charges, dividendes, flexibilité. Quel statut pour optimiser votre activité ?",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>SAS ou SARL pour un Marchand de Biens : Le Comparatif Ultime 2025</h2>
+<p>Créer une société est non négociable (protection du patrimoine, IS, crédibilité). Le choix SAS/SARL impacte coûts sociaux et flexibilité.</p>
+<h3>En synthèse</h3>
+<ul>
+  <li>SAS (assimilé-salarié) : meilleure protection, charges sur salaires élevées, dividendes sans charges sociales.</li>
+  <li>SARL (TNS) : charges plus faibles sur salaires, mais dividendes au-delà de 10 % du capital social soumis à charges.</li>
+  <li>Flexibilité statutaire supérieure en SAS (investisseurs, pactes).</li>
+  </ul>
+<p>La SASU convient à la majorité des lancements orientés dividendes.</p>
+`,
+  },
+  {
+    slug: "tva-sur-marge-super-pouvoir-fiscal-marchand-de-biens",
+    title: "TVA sur Marge : Le Super-Pouvoir Fiscal du Marchand de Biens",
+    date: "2025-10-21",
+    excerpt:
+      "Comprendre et appliquer la TVA sur marge : conditions, calculs, vigilance travaux pour maximiser la rentabilité.",
+    status: "published",
+    content: `
+<div class="text-sm text-slate-500">📅 21 octobre 2025</div>
+<h2>TVA sur Marge : Le Super-Pouvoir Fiscal du Marchand de Biens</h2>
+<p>La TVA sur marge permet, sous conditions, de ne payer la TVA que sur la marge brute et non sur le prix total. Avantage déterminant pour préserver la marge.</p>
+<h3>À retenir</h3>
+<ul>
+  <li>Applicable sur biens d’occasion sans droit à déduction initial (souvent achat à un particulier).</li>
+  <li>Attention aux travaux assimilables à du neuf, qui basculent en TVA sur prix total.</li>
+  <li>Documenter précisément l’origine du bien et l’étendue des travaux.</li>
+  </ul>
+<p>Maîtriser ce régime est un avantage compétitif.</p>
+`,
+  },
+  {
     slug: "marchand-de-biens-2025-opportunites-marche",
     title: "Marchand de biens en 2025 : les nouvelles opportunités du marché immobilier français",
     date: "2025-01-02",
