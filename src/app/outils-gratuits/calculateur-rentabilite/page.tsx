@@ -1,11 +1,11 @@
-import dynamic from 'next/dynamic'
+import Calculator from '@/components/Calculator'
 
 export const metadata = {
   title: "Calculateur de Rentabilité d'Opération | FlipImmo",
   description: "Estimez votre marge nette prévisionnelle en intégrant tous les coûts.",
 }
 
-const Calculator = dynamic(() => import('@/components/Calculator'), { ssr: false })
+
 
 export default function CalculateurRentabilitePage() {
   return (
