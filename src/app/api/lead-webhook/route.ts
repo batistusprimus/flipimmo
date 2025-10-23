@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const DEFAULT_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/7ivqWaWGJdNIRJkNzJbd/webhook-trigger/dfc2a08a-c16c-4d82-8f2a-29d822ce07aa'
 const EXPERT_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/7ivqWaWGJdNIRJkNzJbd/webhook-trigger/d4ba13c7-754d-471e-a150-92f501a51b43'
+const CONTACT_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/7ivqWaWGJdNIRJkNzJbd/webhook-trigger/aad813cd-df0e-437f-a053-d254729948a5'
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
 
     const formName = (body?.form_name ?? '') as string
-    const targetUrl = formName === 'Parler à un expert - QualifForm' ? EXPERT_WEBHOOK_URL : DEFAULT_WEBHOOK_URL
+    let targetUrl = DEFAULT_WEBHOOK_URL
+    if (formName === 'Parler à un expert - QualifForm') targetUrl = EXPERT_WEBHOOK_URL
+    if (formName === 'ContactForm') targetUrl = CONTACT_WEBHOOK_URL
 
     const resp = await fetch(targetUrl, {
       method: 'POST',
