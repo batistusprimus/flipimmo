@@ -70,11 +70,12 @@ export default function FormationGratuitePage() {
       {/* Formulaire de téléchargement */}
       <section id="telechargement" className="mt-14 border-t border-slate-200 pt-10">
         <h2 className="text-2xl font-bold text-slate-900">Recevez Votre Accès Instantané à la Formation</h2>
-        <p className="mt-2 max-w-3xl text-slate-700">Entrez simplement votre prénom et votre adresse email. Le guide PDF vous sera envoyé immédiatement.</p>
+        <p className="mt-2 max-w-3xl text-slate-700">Répondez à quelques questions clés (prénom, email, téléphone, code postal, capital, situation, expérience, délai et motivation). Vous recevrez le guide PDF immédiatement après l'envoi.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
-          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="card relative overflow-hidden p-6 shadow-md ring-1 ring-[#1E3A8A]/10 lg:p-8 bg-white/90 backdrop-blur">
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500" aria-hidden />
             <ClientSimpleDownloadForm />
-            <p className="mt-3 text-xs text-slate-500">100% gratuit. En téléchargeant ce guide, vous acceptez de recevoir nos conseils par email. Vous pouvez vous désinscrire à tout moment.</p>
+            <p className="mt-3 text-xs text-slate-500">100% gratuit. Vos données servent à l'envoi du guide et à une évaluation personnalisée. Consentement requis, désinscription à tout moment. Conforme RGPD.</p>
           </div>
           <div className="hidden items-center justify-center rounded-lg border border-slate-200 bg-white p-3 md:flex">
             <img src="/Visuels/Formation%20gratuite.png" alt="Couverture du guide PDF" loading="lazy" className="h-auto w-full max-h-80 rounded-md object-contain" />

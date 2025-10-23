@@ -2,7 +2,7 @@ import Script from "next/script";
 
 import Calculator from "@/components/Calculator";
 import FAQ from "@/components/FAQ";
-import GhlForm from "@/components/GhlForm";
+import SimpleDownloadForm from "@/components/SimpleDownloadForm";
 
 export default function Home() {
   return (
@@ -181,7 +181,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="badge shadow-sm ring-1 ring-slate-200/60">Gratuit • Conforme RGPD</div>
           <h2 className="mt-3 text-2xl font-bold text-slate-900">Commencez par les Fondamentaux : Téléchargez notre Guide Complet (Gratuit)</h2>
-          <p className="mt-2 text-slate-600">Nous avons condensé des années d'expérience dans un guide PDF de plus de 700 lignes. Un contenu dense, sans blabla, pour vous donner des bases solides.</p>
+          <p className="mt-2 text-slate-600">Répondez à quelques questions clés (prénom, email, téléphone, code postal, capital, situation, expérience, délai et motivation). Vous recevrez le guide PDF immédiatement après l'envoi.</p>
 
           <div className="mt-8 grid items-start gap-8 md:grid-cols-3">
             <div className="md:order-2">
@@ -206,7 +206,7 @@ export default function Home() {
 
             <div className="card relative overflow-hidden p-6 md:order-1 md:col-span-2 shadow-md ring-1 ring-[#1E3A8A]/10 lg:p-8 bg-white/90 backdrop-blur">
               <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500" aria-hidden />
-              <GhlForm />
+              <SimpleDownloadForm />
               <p className="mt-3 text-xs text-slate-500">Vos données sont utilisées uniquement pour vous envoyer le guide et l'évaluation demandés. Elles ne sont jamais transmises à des tiers.</p>
             </div>
           </div>
