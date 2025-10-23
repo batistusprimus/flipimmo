@@ -2,7 +2,7 @@ import Script from "next/script";
 
 import Calculator from "@/components/Calculator";
 import FAQ from "@/components/FAQ";
-import SimpleDownloadForm from "@/components/SimpleDownloadForm";
+import QualifForm from "@/components/QualifForm";
 
 export default function Home() {
   return (
@@ -25,13 +25,13 @@ export default function Home() {
           <div>
               <span className="inline-flex items-center gap-2 rounded-full border border-[#1E3A8A]/20 bg-white px-3 py-1 text-xs font-medium text-[#1E3A8A] shadow-sm">Guide 100% gratuit • Sans engagement</span>
               <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-[#1E3A8A] to-[#F59E0B] bg-clip-text text-transparent">Devenez Marchand de Biens : Le Guide Complet pour Réussir Votre Première Opération</h1>
-              <p className="mt-4 text-slate-600">Formation gratuite complète, outils professionnels et mise en relation avec des experts certifiés. Nous vous accompagnons de A à Z dans la concrétisation de votre projet immobilier.</p>
+              <p className="mt-4 text-slate-600">Formation gratuite complète, outils professionnels et mise en relation avec des experts certifiés.</p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <a href="#formulaire" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]">
-                  Télécharger la Formation Gratuite
-                </a>
-                <a href="/parler-a-un-expert" className="inline-flex items-center justify-center rounded-md border border-[#1E3A8A] bg-white px-5 py-3 text-sm font-semibold text-[#1E3A8A] shadow-sm transition hover:bg-[#1E3A8A]/5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E3A8A]">
                   Parler à un Expert
+                </a>
+                <a href="/formation-gratuite" className="inline-flex items-center justify-center rounded-md border border-[#1E3A8A] bg-white px-5 py-3 text-sm font-semibold text-[#1E3A8A] shadow-sm transition hover:bg-[#1E3A8A]/5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E3A8A]">
+                  Télécharger la Formation Gratuite
                 </a>
               <span className="inline-flex items-center gap-2 rounded-full bg-[#1E3A8A]/10 px-3 py-1 text-xs font-medium text-[#1E3A8A]">⭐ 500+ accompagnés • Note 4.8/5</span>
               </div>
@@ -164,10 +164,10 @@ export default function Home() {
           <h2 className="text-2xl font-bold text-slate-900">Prêt à Passer à l'Action ?</h2>
           <p className="mt-2 text-slate-600">Chaque grand projet commence par une première étape. La vôtre est à portée de clic.</p>
           <div className="mt-6 flex flex-wrap items-center gap-3 justify-center md:justify-start">
-            <a href="#formulaire" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]">Télécharger la Formation Gratuite
+            <a href="#formulaire" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]">Parler à un Expert
               <svg aria-hidden viewBox="0 0 20 20" className="ml-2 h-4 w-4"><path fill="currentColor" d="M12.293 3.293a1 1 0 0 1 1.414 0l4 4A1 1 0 0 1 17 9h-3v6a1 1 0 1 1-2 0V9H9a1 1 0 0 1-.707-1.707l4-4Z"/></svg>
             </a>
-            <a href="/parler-a-un-expert" className="inline-flex items-center justify-center rounded-md border border-[#1E3A8A] bg-white px-5 py-3 text-sm font-semibold text-[#1E3A8A] shadow-sm transition hover:bg-[#1E3A8A]/5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E3A8A]">Parler à un Expert
+            <a href="/formation-gratuite" className="inline-flex items-center justify-center rounded-md border border-[#1E3A8A] bg-white px-5 py-3 text-sm font-semibold text-[#1E3A8A] shadow-sm transition hover:bg-[#1E3A8A]/5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E3A8A]">Télécharger la Formation Gratuite
               <svg aria-hidden viewBox="0 0 20 20" className="ml-2 h-4 w-4"><path fill="currentColor" d="M7 10a1 1 0 0 1 1-1h5.586l-1.293-1.293A1 1 0 0 1 13.707 6.293l3 3a1 1 0 0 1 0 1.414l-3 3A1 1 0 0 1 12.293 12.293L13.586 11H8a1 1 0 0 1-1-1Z"/></svg>
             </a>
           </div>
@@ -180,34 +180,14 @@ export default function Home() {
         </div>
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="badge shadow-sm ring-1 ring-slate-200/60">Gratuit • Conforme RGPD</div>
-          <h2 className="mt-3 text-2xl font-bold text-slate-900">Commencez par les Fondamentaux : Téléchargez notre Guide Complet (Gratuit)</h2>
-          <p className="mt-2 text-slate-600">Répondez à quelques questions clés (prénom, email, téléphone, code postal, capital, situation, expérience, délai et motivation). Vous recevrez le guide PDF immédiatement après l'envoi.</p>
+          <h2 className="mt-3 text-2xl font-bold text-slate-900">Parlez-nous de Votre Projet</h2>
+          <p className="mt-2 text-slate-600">Ces quelques questions sont indispensables pour vous mettre en relation avec l'expert le plus qualifié pour vous accompagner. Un expert vous contacte sous 24 à 48h.</p>
 
-          <div className="mt-8 grid items-start gap-8 md:grid-cols-3">
-            <div className="md:order-2">
-              <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="text-sm font-semibold text-slate-900">Au programme du guide</div>
-                <ul className="mt-4 grid gap-3 text-sm text-slate-700">
-                  <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span><span><span className="font-medium">Module 1 :</span> Comprendre le Marché de 2025</span></li>
-                  <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span><span><span className="font-medium">Module 2 :</span> Maîtriser le Cadre Juridique et Fiscal</span></li>
-                  <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span><span><span className="font-medium">Module 3 :</span> Structurer le Financement de vos Opérations</span></li>
-                  <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span><span><span className="font-medium">Module 4 :</span> Analyser les Marchés Régionaux (5 régions à la loupe)</span></li>
-                  <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span><span><span className="font-medium">Module 5 :</span> Les 7 Étapes Clés d'une Opération Réussie</span></li>
-                  <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span><span><span className="font-medium">Module 6 :</span> Étude de Cas Concrète (Marge de 199 600€)</span></li>
-                </ul>
-              </div>
-
-              <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 shadow-sm"><span>🔒</span><span>Données sécurisées</span></div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 shadow-sm"><span>📩</span><span>Désinscription à tout moment</span></div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 shadow-sm"><span>⏱️</span><span>5 minutes</span></div>
-              </div>
-            </div>
-
-            <div className="card relative overflow-hidden p-6 md:order-1 md:col-span-2 shadow-md ring-1 ring-[#1E3A8A]/10 lg:p-8 bg-white/90 backdrop-blur">
+          <div className="mt-8">
+            <div className="card relative overflow-hidden p-6 shadow-md ring-1 ring-[#1E3A8A]/10 lg:p-8 bg-white/90 backdrop-blur">
               <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500" aria-hidden />
-              <SimpleDownloadForm />
-              <p className="mt-3 text-xs text-slate-500">Vos données sont utilisées uniquement pour vous envoyer le guide et l'évaluation demandés. Elles ne sont jamais transmises à des tiers.</p>
+              <QualifForm />
+              <p className="mt-3 text-xs text-slate-500">En soumettant ce formulaire, vous acceptez d'être recontacté(e) par téléphone par un conseiller d'un organisme partenaire. Échange gratuit, sans engagement. Données confidentielles.</p>
             </div>
           </div>
         </div>

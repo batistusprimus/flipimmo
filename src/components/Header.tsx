@@ -1,12 +1,21 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2" aria-label="FlipImmo.fr">
-      <img src="/FliImmologotransparent.png" alt="FlipImmo.fr" className="h-10 sm:h-12 md:h-14 w-auto" />
+      <Image
+        src="/FliImmologotransparent.png"
+        alt="FlipImmo.fr"
+        width={160}
+        height={56}
+        priority
+        sizes="(max-width: 640px) 120px, (max-width: 768px) 140px, 160px"
+        className="h-10 sm:h-12 md:h-14 w-auto"
+      />
       <span className="sr-only">FlipImmo.fr</span>
     </Link>
   );

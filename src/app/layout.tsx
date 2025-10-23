@@ -5,9 +5,37 @@ import FloatingCTA from "@/components/FloatingCTA";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "FlipImmo.fr – Marchand de biens, guide gratuit et évaluation",
+  metadataBase: new URL("https://flipimmo.fr"),
+  title: {
+    default: "FlipImmo.fr – Marchand de biens, guide gratuit et évaluation",
+    template: "%s • FlipImmo.fr",
+  },
   description:
     "Découvrez le métier de Marchand de Biens : évaluez votre potentiel en 5 minutes et recevez un guide complet gratuit.",
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "https://flipimmo.fr/blog/rss" },
+  },
+  openGraph: {
+    type: "website",
+    url: "https://flipimmo.fr/",
+    title: "FlipImmo.fr – Marchand de biens, guide gratuit et évaluation",
+    description:
+      "Découvrez le métier de Marchand de Biens : évaluez votre potentiel en 5 minutes et recevez un guide complet gratuit.",
+    siteName: "FlipImmo.fr",
+    images: [
+      { url: "/flipimmo_logo.png", width: 1200, height: 630, alt: "FlipImmo.fr" },
+    ],
+    locale: "fr_FR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@flipimmo",
+    title: "FlipImmo.fr – Marchand de biens, guide gratuit et évaluation",
+    description:
+      "Découvrez le métier de Marchand de Biens : évaluez votre potentiel en 5 minutes et recevez un guide complet gratuit.",
+    images: ["/flipimmo_logo.png"],
+  },
   icons: {
     icon: "/favicon.png",
     apple: "/favicon.png",
@@ -19,6 +47,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className="h-full bg-white text-slate-800" suppressHydrationWarning>
       <body className="min-h-full">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "FlipImmo.fr",
+              url: "https://flipimmo.fr/",
+              logo: "https://flipimmo.fr/flipimmo_logo.png",
+              sameAs: [],
+            }),
+          }}
+        />
         <Script id="meta-pixel" strategy="afterInteractive">{`
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
