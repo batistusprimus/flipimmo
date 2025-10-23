@@ -7,10 +7,29 @@ export default function ContactForm() {
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500" aria-hidden="true" />
       <h2 className="text-lg font-semibold text-slate-900">Envoyez-Nous un Message</h2>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault()
-          const fd = new FormData(e.currentTarget as HTMLFormElement)
+          const form = e.currentTarget as HTMLFormElement
+          const fd = new FormData(form)
           if (fd.get('website')) { return }
+          const payload = Object.fromEntries(fd.entries()) as Record<string, any>
+          const mapped = {
+            first_name: payload.prenom,
+            last_name: payload.nom,
+            email: payload.email,
+            subject: payload.sujet,
+            message: payload.message,
+            optin_date: new Date().toISOString(),
+            form_name: 'ContactForm',
+            ...payload,
+          }
+          try {
+            await fetch('/api/lead-webhook', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(mapped),
+            })
+          } catch {}
           window.location.href = '/merci'
         }}
         className="mt-4 grid gap-4"

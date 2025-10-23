@@ -48,8 +48,29 @@ export default function LeadForm() {
     if (step < steps.length - 1) setStep(step + 1)
   }
   const prev = () => setStep((s) => Math.max(0, s - 1))
-  const onSubmit = (data: FormValues) => {
-    console.log('Lead data', data)
+  const onSubmit = async (data: FormValues) => {
+    const mapped = {
+      first_name: data.prenom,
+      last_name: data.nom,
+      email: data.email,
+      phone: data.telephone,
+      postal_code: data.codePostal,
+      capital_bracket: data.capital,
+      employment_status: data.situation,
+      real_estate_experience: data.experience,
+      start_timeline: data.delai,
+      motivation: data.motivation,
+      optin_date: new Date().toISOString(),
+      form_name: 'LeadForm',
+      ...data,
+    }
+    try {
+      await fetch('/api/lead-webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mapped),
+      })
+    } catch {}
     router.push('/merci')
   }
 
@@ -121,10 +142,8 @@ function Step1() {
           <option value="">Choisir…</option>
           <option>Salarié(e)</option>
           <option>Indépendant(e) / Chef d'entreprise</option>
-          <option>En recherche d'emploi</option>
-          <option>Étudiant(e)</option>
-          <option>Retraité(e)</option>
-          <option>Autre</option>
+          <option>Sans emploi</option>
+          <option>En reconversion</option>
         </select>
         <Error name="situation" />
       </Field>
