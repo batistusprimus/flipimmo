@@ -46,6 +46,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className="h-full bg-white text-slate-800" suppressHydrationWarning>
+      <head>
+        <Script id="truconversion" strategy="beforeInteractive">{`
+var _tip = _tip || [];
+(function(d,s,id){
+    var js, tjs = d.getElementsByTagName(s)[0];
+    if(d.getElementById(id)) { return; }
+    js = d.createElement(s); js.id = id;
+    js.async = true;
+    js.src = d.location.protocol + '//app.truconversion.com/ti-js/56917/38598.js';
+    tjs.parentNode.insertBefore(js, tjs);
+}(document, 'script', 'ti-js'));
+        `}</Script>
+      </head>
       <body className="min-h-full">
         <script
           type="application/ld+json"
@@ -83,15 +96,6 @@ fbq('track', 'PageView');
         />
         <Script id="plausible-init" strategy="afterInteractive">{`
 window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
-        `}</Script>
-        <Script id="mouseflow" strategy="afterInteractive">{`
-window._mfq = window._mfq || [];
-(function() {
-  var mf = document.createElement("script");
-  mf.type = "text/javascript"; mf.defer = true;
-  mf.src = "https://cdn.mouseflow.com/projects/b764e0b8-76c1-4806-b1a4-c6b7ffd2d230.js";
-  document.getElementsByTagName("head")[0].appendChild(mf);
-})();
         `}</Script>
         <FloatingCTA />
         <Header />
