@@ -9,6 +9,11 @@ export default function ParlerAUnExpertPage() {
       <span className="inline-flex items-center gap-2 rounded-full border border-[#1E3A8A]/20 bg-white/80 backdrop-blur px-3 py-1 text-xs font-medium text-[#1E3A8A] shadow-sm">Conseil</span>
       <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-[#1E3A8A] to-[#F59E0B] bg-clip-text text-transparent">Parlons de Votre Projet avec un Expert Certifié</h1>
       <p className="mt-2 max-w-3xl text-slate-700">Vous avez un projet de marchand de biens mais vous ne savez pas par où commencer ? Remplissez notre questionnaire en 5 minutes. Nous analysons votre profil et vous mettons en relation avec l'organisme de formation le plus adapté. Un expert vous contacte sous 24 à 48h.</p>
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+        <a href="#formulaire" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 w-full sm:w-auto">
+          Commencer
+        </a>
+      </div>
 
       {/* Visuel héro supprimé à la demande */}
 
@@ -20,7 +25,7 @@ export default function ParlerAUnExpertPage() {
       </section>
 
       {/* Formulaire (iframe GHL si disponible) */}
-      <section className="mt-14 border-t border-slate-200 pt-10">
+      <section id="formulaire" className="mt-14 scroll-mt-24 border-t border-slate-200 pt-10">
         <h2 className="text-2xl font-bold text-slate-900">Parlez-nous de Votre Projet</h2>
         <p className="mt-2 max-w-3xl text-slate-700">Ces quelques questions sont indispensables pour vous mettre en relation avec l'expert le plus qualifié pour vous accompagner.</p>
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-xl ring-1 ring-slate-200/60 backdrop-blur">
@@ -33,6 +38,11 @@ export default function ParlerAUnExpertPage() {
       <section className="mt-14 border-t border-slate-200 pt-10">
         <h2 className="text-2xl font-bold text-slate-900">Notre Engagement de Transparence</h2>
         <p className="mt-2 max-w-3xl text-slate-700">Notre service de mise en relation est 100% gratuit pour vous. Nous sommes rémunérés par nos organismes de formation partenaires via une commission pour chaque lead qualifié. Ce modèle nous permet de vous offrir un service d'orientation de qualité, sans aucun frais.</p>
+        <div className="mt-6">
+          <a href="#formulaire" className="inline-flex w-full sm:w-auto items-center justify-center rounded-md bg-[#1E3A8A] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">
+            Remplir le questionnaire (5 min)
+          </a>
+        </div>
       </section>
 
       {/* Nos partenaires certifiés */}
@@ -45,6 +55,11 @@ export default function ParlerAUnExpertPage() {
           <img src="/LogosPartenaires/Logo-Axio-1.png" alt="Axio" loading="lazy" className="h-8 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition" />
         </div>
         <p className="mt-3 text-xs text-slate-500">Partenaires sélectionnés, certifiés Qualiopi.</p>
+        <div className="mt-6">
+          <a href="#formulaire" className="inline-flex w-full sm:w-auto items-center justify-center rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+            Parler à un expert
+          </a>
+        </div>
       </section>
     </div>
   );
