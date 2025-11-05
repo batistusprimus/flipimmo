@@ -1,0 +1,176 @@
+import { NextRequest, NextResponse } from 'next/server';
+
+/**
+ * API Route pour récupérer les analytics des tunnels
+ * 
+ * Cette route sera utilisée pour :
+ * 1. Récupérer les données depuis Vercel Analytics
+ * 2. Agréger les événements de tracking custom
+ * 3. Filtrer par funnel, période et variante
+ * 
+ * Pour activer cette API :
+ * 1. Renommer ce fichier en route.ts (supprimer .example)
+ * 2. Installer les dépendances nécessaires
+ * 3. Configurer les variables d'environnement
+ * 4. Décommenter le code ci-dessous
+ */
+
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const funnel = searchParams.get('funnel');
+  const timeframe = searchParams.get('timeframe') || 'all';
+  const variant = searchParams.get('variant') || 'all';
+
+  if (!funnel) {
+    return NextResponse.json(
+      { error: 'Le paramètre "funnel" est requis' },
+      { status: 400 }
+    );
+  }
+
+  try {
+    // TODO: Implémenter la récupération des données réelles
+    
+    // Option 1: Depuis Vercel Analytics
+    // const analyticsData = await fetchVercelAnalytics(funnel, timeframe, variant);
+    
+    // Option 2: Depuis une base de données
+    // const analyticsData = await db.query(...);
+    
+    // Option 3: Depuis un service tiers (Google Analytics, Mixpanel, etc.)
+    // const analyticsData = await fetchThirdPartyAnalytics(...);
+
+    // Pour l'instant, retourner une erreur indiquant que l'API n'est pas encore implémentée
+    return NextResponse.json(
+      { 
+        error: 'API non implémentée',
+        message: 'Cette API doit être configurée avec une vraie source de données'
+      },
+      { status: 501 }
+    );
+
+  } catch (error) {
+    console.error('Erreur lors de la récupération des analytics:', error);
+    return NextResponse.json(
+      { error: 'Erreur serveur' },
+      { status: 500 }
+    );
+  }
+}
+
+// Exemple de fonction pour récupérer les données depuis Vercel Analytics
+/*
+async function fetchVercelAnalytics(
+  funnel: string,
+  timeframe: string,
+  variant: string
+) {
+  // TODO: Installer @vercel/analytics
+  // npm install @vercel/analytics
+  
+  const startDate = getStartDateFromTimeframe(timeframe);
+  const endDate = new Date();
+
+  // Récupérer les événements de tracking
+  const events = await fetchEvents({
+    startDate,
+    endDate,
+    filter: {
+      name: 'funnel_event',
+      properties: {
+        funnel,
+        ...(variant !== 'all' && { variant }),
+      },
+    },
+  });
+
+  // Agréger les données
+  return aggregateAnalyticsData(events);
+}
+
+function getStartDateFromTimeframe(timeframe: string): Date {
+  const now = new Date();
+  
+  switch (timeframe) {
+    case 'today':
+      return new Date(now.setHours(0, 0, 0, 0));
+    case 'week':
+      return new Date(now.setDate(now.getDate() - 7));
+    case 'month':
+      return new Date(now.setDate(now.getDate() - 30));
+    case 'quarter':
+      return new Date(now.setMonth(now.getMonth() - 3));
+    case 'year':
+      return new Date(now.setFullYear(now.getFullYear() - 1));
+    default:
+      return new Date(0); // All time
+  }
+}
+
+function aggregateAnalyticsData(events: any[]) {
+  // TODO: Implémenter l'agrégation des données
+  // - Calculer le nombre de visites par étape
+  // - Calculer les taux de conversion
+  // - Grouper par variante
+  // - Créer les séries temporelles
+  
+  return {
+    totalVisits: 0,
+    conversions: 0,
+    conversionRate: 0,
+    variants: {},
+    pageConversions: [],
+    deviceSplit: [],
+    contactsOverTime: [],
+  };
+}
+*/
+
+// Exemple avec une base de données (Prisma)
+/*
+import { prisma } from '@/lib/prisma';
+
+async function fetchFromDatabase(
+  funnel: string,
+  timeframe: string,
+  variant: string
+) {
+  const startDate = getStartDateFromTimeframe(timeframe);
+  
+  const events = await prisma.funnelEvent.findMany({
+    where: {
+      funnelId: funnel,
+      timestamp: {
+        gte: startDate,
+      },
+      ...(variant !== 'all' && { variant }),
+    },
+    orderBy: {
+      timestamp: 'asc',
+    },
+  });
+
+  return aggregateAnalyticsData(events);
+}
+*/
+
+// Exemple de schéma Prisma pour stocker les événements
+/*
+// schema.prisma
+model FunnelEvent {
+  id          String   @id @default(cuid())
+  funnelId    String
+  stepName    String
+  variant     String?
+  timestamp   DateTime @default(now())
+  deviceType  String
+  sessionId   String
+  converted   Boolean  @default(false)
+  
+  @@index([funnelId, timestamp])
+  @@index([sessionId])
+}
+*/
+
+
+

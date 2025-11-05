@@ -17,6 +17,10 @@ body { font-family: var(--font-sans); background: #fff; color: #0f172a; }
 .card { @apply rounded-xl border border-slate-200 bg-white shadow-sm; }
 .section { @apply py-14 md:py-20; }
 
+/* Hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Typographie des articles */
 .prose { @apply text-slate-700 leading-relaxed; }
 .prose > *:first-child { @apply mt-0; }
