@@ -114,7 +114,17 @@ function LandingPageContent() {
             </p>
 
             <div className="mb-4" suppressHydrationWarning>
-              <div id="leadforms-embd-form" suppressHydrationWarning></div>
+            <div id="leadforms-embd-form" suppressHydrationWarning>
+              <div className="w-full rounded-xl border border-gray-200 p-4">
+                <div className="animate-pulse space-y-3">
+                  <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            </div>
             </div>
 
             <div className="mt-8 pt-6 border-t border-gray-200">
@@ -122,7 +132,7 @@ function LandingPageContent() {
                 Ils nous font confiance
               </p>
 
-              <div className="overflow-x-auto hide-scrollbar">
+            <div className="overflow-x-auto hide-scrollbar" style={{ contentVisibility: 'auto' }}>
                 <div className="flex gap-8 items-center justify-start md:justify-center min-w-max px-4">
                   <div className="flex-shrink-0 w-32 h-16 relative grayscale hover:grayscale-0 transition-all">
                     <Image
@@ -175,11 +185,7 @@ function LandingPageContent() {
 
 export default function LandingPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-gray-500">Chargement...</div>
-      </div>
-    }>
+    <Suspense fallback={null}>
       <LandingPageContent />
     </Suspense>
   );
