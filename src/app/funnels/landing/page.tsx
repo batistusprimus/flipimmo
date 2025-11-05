@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Script from 'next/script';
 import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLandingABTracking } from './hooks';
@@ -13,7 +14,7 @@ function LandingPageContent() {
   const searchParams = useSearchParams();
   const variant = useLandingABTracking(searchParams.get('v'));
 
-  // Injection du token, de la config et du script après montage pour garantir la présence du conteneur
+  // Injection du token et de la config côté client au cas où (en complément de l'injection inline SSR)
   useEffect(() => {
     // Token global requis par le widget
     const tokenScript = document.createElement('script');
@@ -27,22 +28,9 @@ function LandingPageContent() {
     rawConfig.textContent = JSON.stringify(formConfig);
     document.body.appendChild(rawConfig);
 
-    // Script principal du widget (URL finale sans redirection)
-    const pixelScript = document.createElement('script');
-    pixelScript.src = LEADBOT_SCRIPT_SRC;
-    pixelScript.async = true;
-    pixelScript.onload = () => {
-      console.log('LeadBot script chargé');
-    };
-    pixelScript.onerror = () => {
-      console.error('Erreur lors du chargement du script LeadBot');
-    };
-    document.head.appendChild(pixelScript);
-
     return () => {
       try { document.head.removeChild(tokenScript); } catch {}
       try { document.body.removeChild(rawConfig); } catch {}
-      try { document.head.removeChild(pixelScript); } catch {}
     };
   }, []);
 
@@ -100,6 +88,14 @@ function LandingPageContent() {
       <script
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: `window.form_token = "${FORM_TOKEN}";` }}
+      />
+
+      <Script
+        id="leadbot-loader"
+        src={LEADBOT_SCRIPT_SRC}
+        strategy="afterInteractive"
+        onLoad={() => { console.log('LeadBot script chargé'); }}
+        onError={() => { console.error('Erreur lors du chargement du script LeadBot'); }}
       />
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
