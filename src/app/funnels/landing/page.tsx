@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Script from 'next/script';
 import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLandingABTracking } from './hooks';
@@ -89,17 +88,6 @@ function LandingPageContent() {
 
   return (
     <>
-      <script
-        id="leadFormOfflineSettings"
-        type="application/json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(formConfig).replace(/</g, '\\u003c') }}
-      />
-      <script
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: `window.form_token = "${FORM_TOKEN}";` }}
-      />
-
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-3xl shadow-lg p-3 md:p-5">
@@ -131,7 +119,7 @@ function LandingPageContent() {
                 Ils nous font confiance
               </p>
 
-            <div className="overflow-x-auto hide-scrollbar" style={{ contentVisibility: 'auto' }}>
+              <div className="overflow-x-auto hide-scrollbar" style={{ contentVisibility: 'auto' }}>
                 <div className="flex gap-8 items-center justify-start md:justify-center min-w-max px-4">
                   <div className="flex-shrink-0 w-32 h-16 relative grayscale hover:grayscale-0 transition-all">
                     <Image
