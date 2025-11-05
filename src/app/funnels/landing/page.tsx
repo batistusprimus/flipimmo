@@ -91,6 +91,16 @@ function LandingPageContent() {
 
   return (
     <>
+      <script
+        id="leadFormOfflineSettings"
+        type="application/json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(formConfig).replace(/</g, '\\u003c') }}
+      />
+      <script
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: `window.form_token = "${FORM_TOKEN}";` }}
+      />
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-3xl shadow-lg p-3 md:p-5">
