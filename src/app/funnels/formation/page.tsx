@@ -1,8 +1,9 @@
 'use client';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { config } from './config';
 
-export default function Page() {
+function FormationPageContent() {
   const sp = useSearchParams();
   const variantKey = (sp.get('v') as 'a' | 'b') || undefined;
   const utm = Object.fromEntries([...sp.entries()].filter(([k]) => k.startsWith('utm_')));
@@ -17,5 +18,17 @@ export default function Page() {
       </p>
       <p>Le moteur de quiz sera branché ici. Vous pouvez déjà modifier les étapes dans <code>config.ts</code>.</p>
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <main style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
+        <div style={{ color: '#555' }}>Chargement...</div>
+      </main>
+    }>
+      <FormationPageContent />
+    </Suspense>
   );
 }
