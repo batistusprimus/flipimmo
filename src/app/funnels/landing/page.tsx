@@ -1,19 +1,50 @@
 'use client';
 
 import Image from 'next/image';
-import Script from 'next/script';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLandingABTracking } from './hooks';
 import formConfig from './formConfig.json';
 
 const FORM_TOKEN = 'GLFT-RNLWSRPR86OKPJTWLZ76KL73BB1';
 const LEADBOT_SCRIPT_SRC = 'https://widget.prod.getleadforms.com/';
-const FORM_CONFIG_JSON = JSON.stringify(formConfig).replace(/</g, '\\u003c');
 
 function LandingPageContent() {
   const searchParams = useSearchParams();
   const variant = useLandingABTracking(searchParams.get('v'));
+
+  // Injection du token, de la config et du script après montage pour garantir la présence du conteneur
+  useEffect(() => {
+    // Token global requis par le widget
+    const tokenScript = document.createElement('script');
+    tokenScript.textContent = `window.form_token = "${FORM_TOKEN}";`;
+    document.head.appendChild(tokenScript);
+
+    // Configuration JSON attendue par le widget
+    const rawConfig = document.createElement('script');
+    rawConfig.type = 'application/json';
+    rawConfig.id = 'leadFormOfflineSettings';
+    rawConfig.textContent = JSON.stringify(formConfig);
+    document.body.appendChild(rawConfig);
+
+    // Script principal du widget (URL finale sans redirection)
+    const pixelScript = document.createElement('script');
+    pixelScript.src = LEADBOT_SCRIPT_SRC;
+    pixelScript.async = true;
+    pixelScript.onload = () => {
+      console.log('LeadBot script chargé');
+    };
+    pixelScript.onerror = () => {
+      console.error('Erreur lors du chargement du script LeadBot');
+    };
+    document.head.appendChild(pixelScript);
+
+    return () => {
+      try { document.head.removeChild(tokenScript); } catch {}
+      try { document.body.removeChild(rawConfig); } catch {}
+      try { document.head.removeChild(pixelScript); } catch {}
+    };
+  }, []);
 
   // Contenu par variante
   const getTitle = () => {
@@ -60,29 +91,6 @@ function LandingPageContent() {
 
   return (
     <>
-      <Script id="leadbot-token" strategy="beforeInteractive">
-        {`window.form_token = "${FORM_TOKEN}";`}
-      </Script>
-
-      <script
-        id="leadFormOfflineSettings"
-        type="application/json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: FORM_CONFIG_JSON }}
-      />
-
-      <Script
-        id="leadbot-loader"
-        src={LEADBOT_SCRIPT_SRC}
-        strategy="beforeInteractive"
-        onLoad={() => {
-          console.log('LeadBot script chargé');
-        }}
-        onError={() => {
-          console.error('Erreur lors du chargement du script LeadBot');
-        }}
-      />
-
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-3xl shadow-lg p-3 md:p-5">
