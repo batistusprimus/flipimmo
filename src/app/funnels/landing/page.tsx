@@ -93,7 +93,8 @@ function LandingPageContent() {
       <Script
         id="leadbot-loader"
         src={LEADBOT_SCRIPT_SRC}
-        strategy="afterInteractive"
+        strategy="beforeInteractive"
+        crossOrigin="anonymous"
         onLoad={() => { console.log('LeadBot script chargé'); }}
         onError={() => { console.error('Erreur lors du chargement du script LeadBot'); }}
       />
