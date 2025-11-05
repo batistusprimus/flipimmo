@@ -8,7 +8,7 @@ import { useLandingABTracking } from './hooks';
 import formConfig from './formConfig.json';
 
 const FORM_TOKEN = 'GLFT-RNLWSRPR86OKPJTWLZ76KL73BB1';
-const LEADBOT_SCRIPT_SRC = 'https://widget.prod.getleadforms.com/';
+const LEADBOT_SCRIPT_SRC = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js';
 
 function LandingPageContent() {
   const searchParams = useSearchParams();
