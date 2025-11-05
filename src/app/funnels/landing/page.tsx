@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLandingABTracking } from './hooks';
+import formConfig from './formConfig.json';
 
 function LandingPageContent() {
   const searchParams = useSearchParams();
@@ -15,20 +16,11 @@ function LandingPageContent() {
     tokenScript.textContent = 'window.form_token = "GLFT-RNLWSRPR86OKPJTWLZ76KL73BB1";';
     document.head.appendChild(tokenScript);
 
-    // Injecter le JSON de configuration
-    // Le JSON complet avec toutes les étapes est fourni directement depuis le message initial de l'utilisateur
+    // Injecter le JSON de configuration avec toutes les étapes
     const rawConfig = document.createElement('script');
     rawConfig.type = 'application/json';
     rawConfig.id = 'leadFormOfflineSettings';
-    // Le JSON complet fourni par l'utilisateur dans son message initial sera utilisé ici
-    // Il contient toutes les étapes du formulaire
-    rawConfig.textContent = document.getElementById('leadFormOfflineSettingsInline')?.textContent || 
-      (() => {
-        // Fallback : le JSON complet sera injecté via un script tag dans le HTML
-        // Pour l'instant, on retourne un JSON minimal
-        const inlineScript = document.querySelector('script[type="application/json"][id="leadFormOfflineSettingsInline"]');
-        return inlineScript ? inlineScript.textContent : '{"lead_bot":{"id":23379,"name":"FlipImmo","page_url":"http://blank.com/*","display_mode":"embeddable","entry_step":229151,"phone_verification_enabled":true},"steps":[]}';
-      })();
+    rawConfig.textContent = JSON.stringify(formConfig);
     document.body.appendChild(rawConfig);
 
     // Charger le script principal après que le JSON soit injecté
