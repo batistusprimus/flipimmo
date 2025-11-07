@@ -7,7 +7,7 @@ import { useLandingABTracking } from './hooks';
 import formConfig from './formConfig.json';
 import Script from 'next/script';
 
-const FORM_TOKEN = 'GLFT-RNLWSRPR86OKPJTWLZ76KL73BB1';
+const FORM_TOKEN = 'GLFT-CS0KX7L8X717S68QV365GCMO7II';
 const LEADBOT_SCRIPT_SRC = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js';
 
 function LandingPageContent() {
@@ -60,9 +60,9 @@ function LandingPageContent() {
 
   return (
     <>
-      {/* Pixel puis token comme dans la doc LeadCapture */}
+      {/* Définir le token AVANT de charger le pixel */}
+      <Script id="leadcapture-token" strategy="beforeInteractive">{`window.form_token = "${FORM_TOKEN}";`}</Script>
       <Script id="leadcapture-pixel" src={LEADBOT_SCRIPT_SRC} strategy="afterInteractive" />
-      <Script id="leadcapture-token" strategy="afterInteractive">{`window.form_token = "${FORM_TOKEN}";`}</Script>
 
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
