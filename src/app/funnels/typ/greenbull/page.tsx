@@ -41,6 +41,13 @@ export default function Page() {
         />
       </div>
       <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
+      <p className="mt-10 text-center text-xs text-slate-500">
+        <a href="/politique-de-confidentialite" className="underline">Politique de confidentialité</a>
+        {' '}
+        ·
+        {' '}
+        <a href="/mentions-legales" className="underline">Mentions légales</a>
+      </p>
     </div>
   )
 }

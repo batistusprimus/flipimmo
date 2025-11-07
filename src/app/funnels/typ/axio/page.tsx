@@ -43,6 +43,13 @@ export default function Page() {
         </div>
         <p className="mt-3 text-center text-sm italic text-slate-600">Votre guide gratuit vous a été envoyé par e‑mail.</p>
       </div>
+      <p className="mt-10 text-center text-xs text-slate-500">
+        <a href="/politique-de-confidentialite" className="underline">Politique de confidentialité</a>
+        {' '}
+        ·
+        {' '}
+        <a href="/mentions-legales" className="underline">Mentions légales</a>
+      </p>
     </div>
   )
 }

@@ -144,7 +144,12 @@ function LandingPageContent() {
           </div>
 
           <p className="text-xs text-gray-500 text-center mt-6">
-            Vos données sont sécurisées et ne seront jamais partagées.
+            Vos données sont sécurisées et ne seront jamais partagées. 
+            <a href="/politique-de-confidentialite" className="underline">Politique de confidentialité</a>
+            {' '}
+            ·
+            {' '}
+            <a href="/mentions-legales" className="underline">Mentions légales</a>
           </p>
         </div>
       </div>

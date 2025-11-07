@@ -27,6 +27,13 @@ export default function Page() {
           Visite FlipImmo.fr pour te former gratuitement
         </a>
       </div>
+      <p className="mt-10 text-center text-xs text-slate-500">
+        <a href="/politique-de-confidentialite" className="underline">Politique de confidentialité</a>
+        {' '}
+        ·
+        {' '}
+        <a href="/mentions-legales" className="underline">Mentions légales</a>
+      </p>
     </div>
   )
 }
