@@ -91,6 +91,29 @@ Ce document récapitule TOUT le système créé pour FlipImmo : tracking analyti
 - Chargement : ~0.5 seconde (au lieu de 2s avec méthode standard)
 - Raw Code utilisé pour vitesse maximale
 
+### Redirections dynamiques via LeadProsper (Production)
+
+Objectif: rediriger chaque lead vers une TYP différente selon ses réponses, en s'appuyant sur un `redirect_url` retourné par LeadProsper.
+
+Étapes à configurer:
+1. Plateforme de distribution: utiliser LeadProsper (ou équivalent supportant postbacks temps réel) et s'assurer que la réponse renvoie un champ `redirect_url` adapté au matching.
+2. Formulaire maître: garder un seul Lead Form dans LeadCapture pour tout le trafic.
+3. Webhook LeadCapture: activer le webhook et renseigner l'endpoint LeadProsper (POST). Vérifier que LeadProsper renvoie le champ `redirect_url` dans sa réponse.
+4. Mappage du champ de redirection: soumettre un lead de test, repérer le nom du champ dans la réponse (ex: `redirect_url`), l'indiquer dans "Webhook Redirect URL Field Name" dans les réglages du webhook LeadCapture.
+5. Fallback: définir une redirection d'erreur (Redirect Error Step) vers une TYP par défaut quand aucun `redirect_url` n'est renvoyé (ex: `/funnels/typ/moins-20k`).
+6. Tests finaux: vérifier l'envoi vers LeadProsper, le retour du `redirect_url`, la redirection automatique vers la bonne TYP et le fallback en cas de disqualification.
+
+TYP cibles (front):
+- Moins de 20k: `/funnels/typ/moins-20k`
+- La Relève: `/funnels/typ/lareleve` → Calendly intégré
+- AXIO: `/funnels/typ/axio`
+- GreenBull Campus: `/funnels/typ/greenbull` → Calendly intégré
+
+Notes d'intégration:
+- Les URL Calendly utilisées: La Relève `https://calendly.com/remaoun/30min?back=1`, GreenBull `https://calendly.com/d/csm9-nf9-stn/candidature-incubateur-entretien-de-45-min`.
+- Confettis déclenchés côté front (canvas-confetti via CDN) sur La Relève, AXIO et GreenBull.
+- Optionnel: transmettre UTM et variante A/B à LeadProsper pour enrichir le routage et l'attribution (champs cachés ou pass-through).
+
 ### Fichiers
 ```
 /funnels/landing/
