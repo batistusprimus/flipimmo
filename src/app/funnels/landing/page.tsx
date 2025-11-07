@@ -8,7 +8,8 @@ import formConfig from './formConfig.json';
 import Script from 'next/script';
 
 const FORM_TOKEN = 'GLFT-CS0KX7L8X717S68QV365GCMO7II';
-const LEADBOT_SCRIPT_SRC = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js';
+// Cache-bust pour éviter le cache CDN du pixel Leadbot
+const LEADBOT_SCRIPT_SRC = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js?v=20251107';
 
 function LandingPageContent() {
   const searchParams = useSearchParams();
