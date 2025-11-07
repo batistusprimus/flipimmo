@@ -4,17 +4,25 @@ import ConfettiOnce from '@/components/ConfettiOnce'
 
 export default function Page() {
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-10">
+    <div className="mx-auto w-full max-w-4xl px-4 py-10">
       <ConfettiOnce pieces={160} />
       <div className="mb-6 text-center">
         <img src="/images_funnels/Flipmmologotransparentrectangle.svg" alt="FlipImmo" className="mx-auto h-12 w-auto" />
       </div>
       <div className="mb-2 text-center">
-        <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">Confirmation</span>
+        <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700 ring-1 ring-emerald-200">Confirmation</span>
       </div>
-      <h1 className="text-center text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">Votre demande de formation est bien enregistrée</h1>
+      <h1 className="text-center text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
+        <span className="bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">Votre demande de formation</span> est bien enregistrée
+      </h1>
       <p className="mt-3 text-center text-slate-700">Merci pour votre intérêt.</p>
       <p className="mt-1 text-center text-slate-700">Vous allez recevoir votre <span className="font-semibold">guide du Marchand de Biens</span> par email dans les prochaines minutes.</p>
+
+      <div className="mx-auto mt-4 flex max-w-xl flex-col items-center justify-center gap-3 sm:flex-row">
+        <a href="#etape" className="inline-flex w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 sm:w-auto">Étape suivante</a>
+        <a href="#apropos" className="inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 sm:w-auto">À propos</a>
+        <a href="#programme" className="inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 sm:w-auto">Programme</a>
+      </div>
 
       <div className="mt-5 rounded-md bg-emerald-50 p-4 text-emerald-900 ring-1 ring-emerald-200">
         <div className="flex flex-col items-start gap-1 md:flex-row md:items-center md:gap-2">
@@ -30,23 +38,29 @@ export default function Page() {
       <div className="mt-8 grid gap-6 text-slate-900">
         <div className="text-center">
           <img src="/LogosPartenaires/Logo-Axio-1.png" alt="AXIO Formation" className="mx-auto h-10 w-auto" />
+          <div className="mt-2 text-xs font-medium uppercase tracking-wide text-slate-500">Partenaire formation — Axio</div>
         </div>
 
         <div className="mx-auto max-w-2xl">
-          <h2 className="text-xl font-bold tracking-tight">Étape suivante</h2>
-          <div className="mt-4 rounded-lg bg-amber-50 p-4 text-amber-900 ring-1 ring-amber-200">
-            <div className="font-semibold">Lors de cet appel, vous découvrirez comment :</div>
-            <ul className="mt-3 space-y-2 text-sm">
-              <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-amber-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>financer votre formation grâce au CPF,</li>
-              <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-amber-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>accéder à un programme complet de 105h,</li>
-              <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-amber-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>apprendre à votre rythme en distanciel ou présentiel,</li>
-              <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-amber-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>devenir marchand de biens certifié (titre RNCP n°38896).</li>
-            </ul>
+          <h2 id="etape" className="text-xl font-bold tracking-tight">Étape suivante</h2>
+          <div className="mx-auto mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="text-sm font-semibold text-slate-900">Financement</div>
+              <p className="mt-1 text-sm text-slate-700">Découvrir le financement via CPF.</p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="text-sm font-semibold text-slate-900">Programme</div>
+              <p className="mt-1 text-sm text-slate-700">Accéder au cursus complet de 105h.</p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="text-sm font-semibold text-slate-900">Modalités</div>
+              <p className="mt-1 text-sm text-slate-700">Distanciel, présentiel ou hybride.</p>
+            </div>
           </div>
-          </div>
+        </div>
 
         <div className="mx-auto max-w-2xl">
-          <h2 className="text-xl font-bold tracking-tight">À propos d’Axio Formation</h2>
+          <h2 id="apropos" className="text-xl font-bold tracking-tight">À propos d’Axio Formation</h2>
           <p className="mt-2 leading-relaxed">
             Axio Formation est un organisme agréé spécialisé dans les formations professionnelles en immobilier, bureautique et gestion. Toutes les formations sont certifiées et finançables, et incluent un accompagnement administratif complet pour simplifier vos démarches CPF ou OPCO.
           </p>
@@ -64,14 +78,14 @@ export default function Page() {
         </div>
 
         <div className="mx-auto max-w-2xl">
-          <h2 className="text-xl font-bold tracking-tight">Ce que vous allez apprendre</h2>
+          <h2 id="programme" className="text-xl font-bold tracking-tight">Ce que vous allez apprendre</h2>
           <p className="mt-2 leading-relaxed">Cette formation de 105 heures vous permettra de :</p>
           <ul className="mt-3 space-y-2 text-sm">
-            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>analyser un marché immobilier et repérer les meilleures opportunités,</li>
-            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>négocier efficacement vos acquisitions,</li>
-            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>maîtriser la fiscalité et les financements,</li>
-            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>sécuriser juridiquement vos opérations,</li>
-            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>valoriser et revendre vos biens avec rentabilité.</li>
+            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg><span className="font-semibold">analyser un marché</span> et repérer les meilleures opportunités,</li>
+            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg><span className="font-semibold">négocier efficacement</span> vos acquisitions,</li>
+            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg><span className="font-semibold">maîtriser fiscalité et financements</span>,</li>
+            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg><span className="font-semibold">sécuriser juridiquement</span> vos opérations,</li>
+            <li className="flex items-start gap-2"><svg className="mt-0.5 h-4 w-4 text-emerald-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3A1 1 0 016.757 9.8l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg><span className="font-semibold">revendre avec rentabilité</span>.</li>
           </ul>
           <p className="mt-4 italic text-slate-700">“Une formation passionnante et concrète. J’ai pu lancer ma première opération dès la fin du programme.” — Valérie, investisseuse immobilière
             <span className="ml-2 inline-flex align-middle text-amber-500" aria-label="5 sur 5">
