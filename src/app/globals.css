@@ -41,3 +41,9 @@ body { font-family: var(--font-sans); background: #fff; color: #0f172a; }
 .prose th, .prose td { @apply border border-slate-200 px-3 py-2; }
 .prose img { @apply my-6 rounded-lg; }
 .prose h2, .prose h3, .prose h4 { scroll-margin-top: 7rem; }
+
+/* Logos défilants */
+.logo-marquee { overflow: hidden; }
+.logo-marquee-track { display: flex; gap: 2rem; align-items: center; width: max-content; padding-left: 1rem; padding-right: 1rem; animation: logo-marquee 28s linear infinite; }
+.logo-marquee:hover .logo-marquee-track { animation-play-state: paused; }
+@keyframes logo-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }

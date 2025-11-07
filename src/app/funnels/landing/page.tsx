@@ -100,9 +100,8 @@ function LandingPageContent() {
             </div>
 
             <div className="mt-8">
-
-              <div className="overflow-x-auto hide-scrollbar" style={{ contentVisibility: 'auto' }}>
-                <div className="flex gap-8 items-center justify-start md:justify-center min-w-max px-4">
+              <div className="logo-marquee">
+                <div className="logo-marquee-track">
                   <div className="flex-shrink-0 w-32 h-16 relative transition-all">
                     <Image
                       src="/LogosPartenaires/65d5b161937acbd76be801bc_Logo Greenbull Campus.webp"
@@ -111,7 +110,6 @@ function LandingPageContent() {
                       className="object-contain"
                     />
                   </div>
-
                   <div className="flex-shrink-0 w-32 h-16 relative transition-all">
                     <Image
                       src="/LogosPartenaires/Logo-Axio-1.png"
@@ -120,16 +118,48 @@ function LandingPageContent() {
                       className="object-contain"
                     />
                   </div>
-
                   <div className="flex-shrink-0 w-32 h-16 relative transition-all">
                     <Image
-                      src="/images_funnels/Logo_de_la_République_française_(1999).svg.png"
+                      src="/images_funnels/logo-republique-francaise.png"
                       alt="République française"
                       fill
                       className="object-contain"
                     />
                   </div>
+                  <div className="flex-shrink-0 w-32 h-16 relative transition-all">
+                    <Image
+                      src="/LogosPartenaires/la_relve_incubateur_mdb_cover.jpeg"
+                      alt="La Relève"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
 
+                  {/* duplication pour un défilement continu */}
+                  <div className="flex-shrink-0 w-32 h-16 relative transition-all">
+                    <Image
+                      src="/LogosPartenaires/65d5b161937acbd76be801bc_Logo Greenbull Campus.webp"
+                      alt="Greenbull Campus"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 h-16 relative transition-all">
+                    <Image
+                      src="/LogosPartenaires/Logo-Axio-1.png"
+                      alt="Axio"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 h-16 relative transition-all">
+                    <Image
+                      src="/images_funnels/logo-republique-francaise.png"
+                      alt="République française"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                   <div className="flex-shrink-0 w-32 h-16 relative transition-all">
                     <Image
                       src="/LogosPartenaires/la_relve_incubateur_mdb_cover.jpeg"
