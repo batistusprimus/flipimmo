@@ -1,10 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLandingABTracking } from './hooks';
 import formConfig from './formConfig.json';
+import Script from 'next/script';
 
 const FORM_TOKEN = 'GLFT-RNLWSRPR86OKPJTWLZ76KL73BB1';
 const LEADBOT_SCRIPT_SRC = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js';
@@ -12,36 +13,7 @@ const LEADBOT_SCRIPT_SRC = 'https://api.useleadbot.com/lead-bots/get-pixel-scrip
 function LandingPageContent() {
   const searchParams = useSearchParams();
   const variant = useLandingABTracking(searchParams.get('v'));
-
-  // Injection du token et de la config côté client au cas où (en complément de l'injection inline SSR)
-  useEffect(() => {
-    // Token global requis par le widget
-    const tokenScript = document.createElement('script');
-    tokenScript.textContent = `window.form_token = "${FORM_TOKEN}";`;
-    document.head.appendChild(tokenScript);
-
-    // Configuration JSON attendue par le widget
-    const rawConfig = document.createElement('script');
-    rawConfig.type = 'application/json';
-    rawConfig.id = 'leadFormOfflineSettings';
-    rawConfig.textContent = JSON.stringify(formConfig);
-    document.body.appendChild(rawConfig);
-
-    // Charger le script principal une fois que le conteneur et la config existent
-    const pixelScript = document.createElement('script');
-    pixelScript.src = LEADBOT_SCRIPT_SRC;
-    pixelScript.async = true;
-    pixelScript.crossOrigin = 'anonymous';
-    pixelScript.onload = () => { console.log('LeadBot script chargé'); };
-    pixelScript.onerror = () => { console.error('Erreur lors du chargement du script LeadBot'); };
-    document.head.appendChild(pixelScript);
-
-    return () => {
-      try { document.head.removeChild(tokenScript); } catch {}
-      try { document.body.removeChild(rawConfig); } catch {}
-      try { document.head.removeChild(pixelScript); } catch {}
-    };
-  }, []);
+  
 
   // Contenu par variante
   const getTitle = () => {
@@ -88,6 +60,10 @@ function LandingPageContent() {
 
   return (
     <>
+      {/* Pixel puis token comme dans la doc LeadCapture */}
+      <Script id="leadcapture-pixel" src={LEADBOT_SCRIPT_SRC} strategy="afterInteractive" />
+      <Script id="leadcapture-token" strategy="afterInteractive">{`window.form_token = "${FORM_TOKEN}";`}</Script>
+
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-3xl shadow-lg p-3 md:p-5">
@@ -110,6 +86,13 @@ function LandingPageContent() {
               {getSubtitle()}
             </p>
 
+            {/* JSON offline settings dans le body, comme recommandé */}
+            <script
+              id="leadFormOfflineSettings"
+              type="application/json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(formConfig) }}
+            />
+            {/* Conteneur d'embed */}
             <div className="mb-4" suppressHydrationWarning>
               <div id="leadforms-embd-form" suppressHydrationWarning></div>
             </div>
