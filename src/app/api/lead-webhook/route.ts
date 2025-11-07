@@ -14,6 +14,23 @@ export async function POST(req: NextRequest) {
     if (formName === 'Parler à un expert - QualifForm') targetUrl = EXPERT_WEBHOOK_URL
     if (formName === 'ContactForm') targetUrl = CONTACT_WEBHOOK_URL
     if (formName === 'SimpleDownloadForm') targetUrl = FORMATION_WEBHOOK_URL
+    // Leadbot/LeadCapture (landing) payload routing (no form_name)
+    // Route vers FORMATION si le slug/id correspond à notre bot FlipImmo
+    if (!formName) {
+      const slug = (body?.slug_name ?? '') as string
+      const leadBotId = body?.lead_bot?.id as number | undefined
+      if (slug === 'flipimmo' || leadBotId === 23379) {
+        targetUrl = FORMATION_WEBHOOK_URL
+      }
+    }
+
+    // Log minimal pour debug (sans PII détaillée)
+    console.log('[lead-webhook] incoming', {
+      formName,
+      slug: body?.slug_name,
+      leadBotId: body?.lead_bot?.id,
+      targetUrl,
+    })
 
     const resp = await fetch(targetUrl, {
       method: 'POST',
