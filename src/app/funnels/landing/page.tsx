@@ -67,15 +67,17 @@ function LandingPageContent() {
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-3xl shadow-lg p-3 md:p-5">
-            <div className="flex justify-center mb-1">
-              <Image
-                src="/flipimmo_logo.png"
-                alt="FlipImmo.fr"
-                width={300}
-                height={80}
-                className="w-42 md:w-48 h-auto"
-                priority
-              />
+            <div className="mb-1">
+              <div className="relative w-full h-16 md:h-20 lg:h-24">
+                <Image
+                  src="/images_funnels/Flipmmologotransparentrectangle.svg"
+                  alt="FlipImmo.fr"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </div>
 
             <h1 className="text-2xl md:text-3xl font-bold text-center mb-2 leading-tight">
@@ -97,14 +99,11 @@ function LandingPageContent() {
               <div id="leadforms-embd-form" suppressHydrationWarning></div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <p className="text-center text-sm text-gray-500 mb-6 font-medium">
-                Ils nous font confiance
-              </p>
+            <div className="mt-8">
 
               <div className="overflow-x-auto hide-scrollbar" style={{ contentVisibility: 'auto' }}>
                 <div className="flex gap-8 items-center justify-start md:justify-center min-w-max px-4">
-                  <div className="flex-shrink-0 w-32 h-16 relative grayscale hover:grayscale-0 transition-all">
+                  <div className="flex-shrink-0 w-32 h-16 relative transition-all">
                     <Image
                       src="/LogosPartenaires/65d5b161937acbd76be801bc_Logo Greenbull Campus.webp"
                       alt="Greenbull Campus"
@@ -113,7 +112,7 @@ function LandingPageContent() {
                     />
                   </div>
 
-                  <div className="flex-shrink-0 w-32 h-16 relative grayscale hover:grayscale-0 transition-all">
+                  <div className="flex-shrink-0 w-32 h-16 relative transition-all">
                     <Image
                       src="/LogosPartenaires/Logo-Axio-1.png"
                       alt="Axio"
@@ -122,16 +121,16 @@ function LandingPageContent() {
                     />
                   </div>
 
-                  <div className="flex-shrink-0 w-32 h-16 relative grayscale hover:grayscale-0 transition-all">
+                  <div className="flex-shrink-0 w-32 h-16 relative transition-all">
                     <Image
-                      src="/LogosPartenaires/B3-35b772eb-640w.png"
-                      alt="Partenaire B3"
+                      src="/images_funnels/Logo_de_la_République_française_(1999).svg.png"
+                      alt="République française"
                       fill
                       className="object-contain"
                     />
                   </div>
 
-                  <div className="flex-shrink-0 w-32 h-16 relative grayscale hover:grayscale-0 transition-all">
+                  <div className="flex-shrink-0 w-32 h-16 relative transition-all">
                     <Image
                       src="/LogosPartenaires/la_relve_incubateur_mdb_cover.jpeg"
                       alt="La Relève"

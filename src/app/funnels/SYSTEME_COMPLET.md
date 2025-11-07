@@ -57,10 +57,11 @@ Ce document récapitule TOUT le système créé pour FlipImmo : tracking analyti
 **Caractéristiques :**
 - ✅ Design mobile-first
 - ✅ Container blanc avec coins arrondis
-- ✅ Logo FlipImmo centré
+- ✅ Logo FlipImmo en SVG plein-largeur, faible hauteur (h-16/md:h-20/lg:h-24) via `next/image` (`fill + object-contain`)
 - ✅ Titre "Devenir **Marchand de Biens** en 5 questions"
-- ✅ Formulaire LeadCapture embed (5 étapes)
-- ✅ Logos partenaires en scroll horizontal
+- ✅ Formulaire LeadCapture embed (Raw Code)
+- ✅ Logos partenaires en scroll horizontal, en couleur (sans filtre gris)
+- ✅ Suppression du divider et du libellé "Ils nous font confiance"
 - ✅ Pas de header/footer/CTA (page dédiée au tunnel)
 
 ### Formulaire LeadCapture
@@ -71,6 +72,20 @@ Ce document récapitule TOUT le système créé pour FlipImmo : tracking analyti
 - Token : GLFT-RNLWSRPR86OKPJTWLZ76KL73BB1
 - Couleur : #f59e0b (orange)
 - 6 étapes : Start → Métier → Capital → Délai → CPF → Optin → OTP
+- Côté page, l’embed suit strictement la doc LeadCapture:
+
+```tsx
+// 1) Pixel dans le head/body (Next Script)
+<Script id="leadcapture-pixel" src="https://api.useleadbot.com/lead-bots/get-pixel-script.js" strategy="afterInteractive" />
+// 2) Token global
+<Script id="leadcapture-token" strategy="afterInteractive">{`window.form_token = "GLFT-RNLWSRPR86OKPJTWLZ76KL73BB1";`}</Script>
+// 3) JSON offline settings (dans le body)
+<script id="leadFormOfflineSettings" type="application/json" dangerouslySetInnerHTML={{ __html: JSON.stringify(formConfig) }} />
+// 4) Conteneur d’embed
+<div id="leadforms-embd-form" />
+```
+
+- Remarque: `custom_post_url` côté LeadCapture n’est pas encore activé (livraison CRM à paramétrer depuis LeadCapture ou via `/api/lead-webhook`).
 
 **Performance :**
 - Chargement : ~0.5 seconde (au lieu de 2s avec méthode standard)
@@ -79,9 +94,20 @@ Ce document récapitule TOUT le système créé pour FlipImmo : tracking analyti
 ### Fichiers
 ```
 /funnels/landing/
-├── page.tsx              # Landing page complète
+├── page.tsx              # Landing page complète (pixel+token+JSON offline+container)
 └── README.md             # Documentation
 ```
+
+### Logos partenaires (MAJ)
+- Greenbull Campus (`/LogosPartenaires/65d5b161...webp`)
+- AXIO Formation (`/LogosPartenaires/Logo-Axio-1.png`)
+- République française (remplace B3) (`/images_funnels/Logo_de_la_République_française_(1999).svg.png`)
+- La Relève (`/LogosPartenaires/la_relve_incubateur_mdb_cover.jpeg`)
+- Filtre gris supprimé, logos en couleur.
+
+### Logo FlipImmo (MAJ)
+- Source: `public/images_funnels/Flipmmologotransparentrectangle.svg`
+- Rendu: `next/image` en `fill` + `object-contain` dans un conteneur `h-16 md:h-20 lg:h-24` pour un rendu large et net.
 
 ---
 
@@ -262,12 +288,14 @@ http://localhost:3000/funnels/analytics/ab-test
 
 ## 🚀 Prochaines Étapes
 
-### Cette Session
-1. ⏳ Créer page A/B test dashboard
-2. ⏳ Créer système de tracking A/B
-3. ⏳ Créer variante B de la landing
-4. ⏳ Intégrer le tracking
-5. ⏳ Tester le tout
+### Cette Session (07/11/2025)
+1. ✅ Restauration embed LeadCapture (pixel + token + JSON offline + container)
+2. ✅ Remplacement logo B3 par République française (en couleur)
+3. ✅ Suppression divider + texte "Ils nous font confiance"
+4. ✅ Passage du logo FlipImmo en SVG + rendu plein‑largeur (hauteur fixe responsive)
+5. ⏳ Livraison CRM via LeadCapture (`custom_post_url`) ou via `/api/lead-webhook`
+6. ⏳ TYP conditionnelles (4 variantes) côté LeadCapture
+7. ⏳ Validation des copies A/B
 
 ### Plus Tard
 1. Connecter à Vercel Analytics
