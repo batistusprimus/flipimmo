@@ -63,6 +63,10 @@ function LandingPageContent() {
     <>
       {/* Définir le token AVANT de charger le pixel */}
       <Script id="leadcapture-token" strategy="beforeInteractive">{`window.form_token = "${FORM_TOKEN}";`}</Script>
+      {/* Expose aussi la configuration offline au cas où le pixel la lit */}
+      <Script id="leadcapture-offline" strategy="beforeInteractive">{`window.leadFormOfflineSettings = ${JSON.stringify(
+        formConfig
+      )};`}</Script>
       <Script id="leadcapture-pixel" src={LEADBOT_SCRIPT_SRC} strategy="afterInteractive" />
 
       <div className="min-h-screen bg-gray-100 py-2 px-3">
