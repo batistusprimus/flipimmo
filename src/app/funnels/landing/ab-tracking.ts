@@ -14,6 +14,14 @@ interface LandingViewEvent {
   url: string;
 }
 
+interface LandingConversionEvent {
+  variant: LandingVariant;
+  timestamp: Date;
+  sessionId: string;
+  deviceType: string;
+  url: string;
+}
+
 /**
  * Obtient ou crée un ID de session unique
  */
@@ -164,23 +172,98 @@ export function getStoredEvents(): LandingViewEvent[] {
 }
 
 /**
+ * Stocke un événement de conversion dans localStorage
+ */
+function storeConversion(event: LandingConversionEvent): void {
+  if (typeof window === 'undefined') return;
+
+  const storageKey = 'flipimmo_landing_conversions';
+  const existingEvents = localStorage.getItem(storageKey);
+  const events: LandingConversionEvent[] = existingEvents ? JSON.parse(existingEvents) : [];
+  
+  events.push(event);
+  
+  // Garder seulement les 1000 dernières conversions
+  if (events.length > 1000) {
+    events.splice(0, events.length - 1000);
+  }
+  
+  localStorage.setItem(storageKey, JSON.stringify(events));
+}
+
+/**
+ * Track une conversion de la landing (lead généré)
+ * 
+ * @param variant - Variante A ou B
+ */
+export function trackLandingConversion(variant: LandingVariant): void {
+  const event: LandingConversionEvent = {
+    variant,
+    timestamp: new Date(),
+    sessionId: getSessionId(),
+    deviceType: getDeviceType(),
+    url: typeof window !== 'undefined' ? window.location.href : '',
+  };
+
+  storeConversion(event);
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log('✅ Landing Conversion Tracked:', {
+      variant,
+      sessionId: event.sessionId,
+      deviceType: event.deviceType,
+    });
+  }
+}
+
+/**
+ * Récupère toutes les conversions stockées localement
+ */
+export function getStoredConversions(): LandingConversionEvent[] {
+  if (typeof window === 'undefined') return [];
+
+  const storageKey = 'flipimmo_landing_conversions';
+  const stored = localStorage.getItem(storageKey);
+  
+  if (!stored) return [];
+
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Calcule les stats A/B depuis les événements stockés
  */
 export function calculateABStats() {
   const events = getStoredEvents();
+  const conversions = getStoredConversions();
   
   const variantAViews = events.filter(e => e.variant === 'a').length;
   const variantBViews = events.filter(e => e.variant === 'b').length;
+  const variantAConversions = conversions.filter(c => c.variant === 'a').length;
+  const variantBConversions = conversions.filter(c => c.variant === 'b').length;
+  const totalViews = events.length;
+  const totalConversions = conversions.length;
+  const overallConversionRate = totalViews > 0 ? (totalConversions / totalViews) * 100 : 0;
   
   return {
-    totalViews: events.length,
+    totalViews,
+    totalConversions,
+    conversionRate: overallConversionRate,
     variantA: {
       views: variantAViews,
-      percentage: events.length > 0 ? (variantAViews / events.length) * 100 : 0,
+      percentage: totalViews > 0 ? (variantAViews / totalViews) * 100 : 0,
+      conversions: variantAConversions,
+      conversionRate: variantAViews > 0 ? (variantAConversions / variantAViews) * 100 : 0,
     },
     variantB: {
       views: variantBViews,
-      percentage: events.length > 0 ? (variantBViews / events.length) * 100 : 0,
+      percentage: totalViews > 0 ? (variantBViews / totalViews) * 100 : 0,
+      conversions: variantBConversions,
+      conversionRate: variantBViews > 0 ? (variantBConversions / variantBViews) * 100 : 0,
     },
   };
 }
@@ -191,6 +274,7 @@ export function calculateABStats() {
 export function clearEvents(): void {
   if (typeof window === 'undefined') return;
   localStorage.removeItem('flipimmo_landing_events');
+  localStorage.removeItem('flipimmo_landing_conversions');
   sessionStorage.removeItem('flipimmo_landing_variant');
   sessionStorage.removeItem('flipimmo_landing_session');
 }

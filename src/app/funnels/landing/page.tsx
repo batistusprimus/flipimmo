@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLandingABTracking } from './hooks';
+import { trackLandingConversion } from './ab-tracking';
 import formConfig from './formConfig.json';
 import Script from 'next/script';
 
@@ -15,6 +16,63 @@ function LandingPageContent() {
   const searchParams = useSearchParams();
   const variant = useLandingABTracking(searchParams.get('v'));
   
+  // Écoute des événements de succès du pixel Leadbot pour tracker la conversion
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleLeadSuccess = (payload: unknown, source: string) => {
+      trackLandingConversion(variant);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🎯 Conversion détectée (Leadbot)', { source, payload, variant });
+      }
+    };
+
+    const onMessage = (event: MessageEvent) => {
+      try {
+        const origin = event.origin || '';
+        const data = event.data;
+        const asString =
+          typeof data === 'string' ? data.toLowerCase() : JSON.stringify(data).toLowerCase();
+        const fromLeadbot =
+          origin.includes('useleadbot') ||
+          origin.includes('leadcapture') ||
+          asString.includes('leadbot') ||
+          asString.includes('leadcapture');
+        const isSuccess =
+          asString.includes('success') ||
+          asString.includes('submitted') ||
+          asString.includes('conversion') ||
+          asString.includes('lead_created');
+
+        if (fromLeadbot && isSuccess) {
+          handleLeadSuccess(data, 'postMessage');
+        }
+      } catch {
+        // no-op
+      }
+    };
+
+    const onCustomSuccess = (e: Event) => {
+      // @ts-expect-error detail optionnel
+      handleLeadSuccess((e as CustomEvent)?.detail, 'customEvent');
+    };
+
+    window.addEventListener('message', onMessage);
+    window.addEventListener('leadcapture:success', onCustomSuccess as EventListener);
+    window.addEventListener('leadbot:success', onCustomSuccess as EventListener);
+
+    // Callback global que le pixel peut invoquer si supporté
+    // @ts-expect-error attache une fonction au window pour intégrations pixel
+    window.flipimmoOnLeadSuccess = (detail?: unknown) => handleLeadSuccess(detail, 'globalCallback');
+
+    return () => {
+      window.removeEventListener('message', onMessage);
+      window.removeEventListener('leadcapture:success', onCustomSuccess as EventListener);
+      window.removeEventListener('leadbot:success', onCustomSuccess as EventListener);
+      // @ts-expect-error nettoyage
+      delete window.flipimmoOnLeadSuccess;
+    };
+  }, [variant]);
 
   // Contenu par variante
   const getTitle = () => {

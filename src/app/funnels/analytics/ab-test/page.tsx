@@ -13,14 +13,14 @@ export default function ABTestPage() {
     totalVisits: stats.totalViews,
     originalVisits: stats.variantA.views,
     variantVisits: stats.variantB.views,
-    originalConversion: 0, // Pas encore tracké
-    variantConversion: 0, // Pas encore tracké
+    originalConversion: Number((stats.variantA.conversionRate ?? 0).toFixed(2)),
+    variantConversion: Number((stats.variantB.conversionRate ?? 0).toFixed(2)),
   };
 
   const globalStats = {
     totalVisits: stats.totalViews,
-    conversions: 0,
-    conversionRate: 0,
+    conversions: stats.totalConversions ?? 0,
+    conversionRate: Number((stats.conversionRate ?? 0).toFixed(2)),
   };
 
   return (
