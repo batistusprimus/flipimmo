@@ -5,12 +5,17 @@ import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLandingABTracking } from './hooks';
 import { trackLandingConversion } from './ab-tracking';
-import formConfig from './formConfig.json';
 import Script from 'next/script';
 
+declare global {
+  interface Window {
+    flipimmoOnLeadSuccess?: (detail?: unknown) => void;
+  }
+}
+
 const FORM_TOKEN = 'GLFT-CS0KX7L8X717S68QV365GCMO7II';
-// Cache-bust pour éviter le cache CDN du pixel Leadbot
-const LEADBOT_SCRIPT_SRC = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js?v=20251107';
+// Script officiel LeadForms/Leadbot (sans raw code)
+const LEADBOT_SCRIPT_SRC = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js';
 
 function LandingPageContent() {
   const searchParams = useSearchParams();
@@ -53,8 +58,7 @@ function LandingPageContent() {
     };
 
     const onCustomSuccess = (e: Event) => {
-      // @ts-expect-error detail optionnel
-      handleLeadSuccess((e as CustomEvent)?.detail, 'customEvent');
+      handleLeadSuccess((e as CustomEvent).detail, 'customEvent');
     };
 
     window.addEventListener('message', onMessage);
@@ -62,14 +66,12 @@ function LandingPageContent() {
     window.addEventListener('leadbot:success', onCustomSuccess as EventListener);
 
     // Callback global que le pixel peut invoquer si supporté
-    // @ts-expect-error attache une fonction au window pour intégrations pixel
     window.flipimmoOnLeadSuccess = (detail?: unknown) => handleLeadSuccess(detail, 'globalCallback');
 
     return () => {
       window.removeEventListener('message', onMessage);
       window.removeEventListener('leadcapture:success', onCustomSuccess as EventListener);
       window.removeEventListener('leadbot:success', onCustomSuccess as EventListener);
-      // @ts-expect-error nettoyage
       delete window.flipimmoOnLeadSuccess;
     };
   }, [variant]);
@@ -119,13 +121,9 @@ function LandingPageContent() {
 
   return (
     <>
-      {/* Définir le token AVANT de charger le pixel */}
+      {/* Pixel LeadForms + token, recommandé par LeadCapture */}
+      <Script id="leadcapture-pixel" src={LEADBOT_SCRIPT_SRC} strategy="afterInteractive" async />
       <Script id="leadcapture-token" strategy="beforeInteractive">{`window.form_token = "${FORM_TOKEN}";`}</Script>
-      {/* Expose aussi la configuration offline au cas où le pixel la lit */}
-      <Script id="leadcapture-offline" strategy="beforeInteractive">{`window.leadFormOfflineSettings = ${JSON.stringify(
-        formConfig
-      )};`}</Script>
-      <Script id="leadcapture-pixel" src={LEADBOT_SCRIPT_SRC} strategy="afterInteractive" />
 
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
@@ -151,12 +149,6 @@ function LandingPageContent() {
               {getSubtitle()}
             </p>
 
-            {/* JSON offline settings dans le body, comme recommandé */}
-            <script
-              id="leadFormOfflineSettings"
-              type="application/json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(formConfig) }}
-            />
             {/* Conteneur d'embed */}
             <div className="mb-4" suppressHydrationWarning>
               <div id="leadforms-embd-form" suppressHydrationWarning></div>
