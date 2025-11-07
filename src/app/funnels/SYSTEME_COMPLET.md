@@ -190,6 +190,12 @@ const isFunnelPage = pathname?.startsWith('/funnels/');
 │   ├── page.tsx          # Page principale
 │   └── README.md
 │
+├── typ/                   # Thank You Pages conditionnelles
+│   ├── moins-20k/page.tsx     # TYP capital insuffisant
+│   ├── lareleve/page.tsx      # TYP La Relève (Calendly + confettis)
+│   ├── axio/page.tsx          # TYP AXIO (confettis)
+│   └── greenbull/page.tsx     # TYP GreenBull (Calendly + confettis)
+│
 ├── formation/            # Tunnel Formation (existant)
 │   ├── page.tsx
 │   ├── config.ts
@@ -293,9 +299,20 @@ http://localhost:3000/funnels/analytics/ab-test
 2. ✅ Remplacement logo B3 par République française (en couleur)
 3. ✅ Suppression divider + texte "Ils nous font confiance"
 4. ✅ Passage du logo FlipImmo en SVG + rendu plein‑largeur (hauteur fixe responsive)
+5. ✅ Création des 4 TYP (`/typ/moins-20k`, `/typ/lareleve`, `/typ/axio`, `/typ/greenbull`)
+   - La Relève et GreenBull intègrent l’embed Calendly
+   - Confettis sur La Relève, AXIO, GreenBull (via canvas-confetti CDN)
 5. ⏳ Livraison CRM via LeadCapture (`custom_post_url`) ou via `/api/lead-webhook`
 6. ⏳ TYP conditionnelles (4 variantes) côté LeadCapture
 7. ⏳ Validation des copies A/B
+
+### URLs des TYP (Front)
+- Moins de 20k: `/typ/moins-20k`
+- La Relève: `/typ/lareleve` → Calendly: `https://calendly.com/remaoun/30min?back=1`
+- AXIO: `/typ/axio`
+- GreenBull Campus: `/typ/greenbull` → Calendly: `https://calendly.com/d/csm9-nf9-stn/candidature-incubateur-entretien-de-45-min`
+
+Note: configurer dans LeadCapture les redirections conditionnelles post‑OTP vers ces URLs.
 
 ### Plus Tard
 1. Connecter à Vercel Analytics
