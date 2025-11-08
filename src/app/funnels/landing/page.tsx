@@ -5,15 +5,12 @@ import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLandingABTracking } from './hooks';
 import { trackLandingConversion } from './ab-tracking';
-import Script from 'next/script';
 
 declare global {
   interface Window {
     flipimmoOnLeadSuccess?: (detail?: unknown) => void;
   }
 }
-
-const FORM_TOKEN = 'GLFT-CS0KX7L8X717S68QV365GCMO7II';
 
 function LandingPageContent() {
   const searchParams = useSearchParams();
@@ -119,9 +116,9 @@ function LandingPageContent() {
 
   return (
     <>
-      {/* LeadForms Pixel + token (recommandé) */}
-      <Script async src="https://api.useleadbot.com/lead-bots/get-pixel-script.js" />
-      <Script id="leadforms-token">{`window.form_token = "${FORM_TOKEN}";`}</Script>
+      {/* LeadForms Pixel (exigence: code exact) */}
+      <script async type="text/javascript" src="https://api.useleadbot.com/lead-bots/get-pixel-script.js"></script>
+      <script type="text/javascript">{"window.form_token = \"GLFT-CS0KX7L8X717S68QV365GCMO7II\";"}</script>
 
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">

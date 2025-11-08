@@ -60,9 +60,24 @@ export function useLandingABTracking(urlVariant?: string | null): LandingVariant
  * ```
  */
 export function useABStats() {
-  const [stats, setStats] = useState(calculateABStats());
+  const [stats, setStats] = useState(() => {
+    // Initialiser avec des valeurs par défaut pour éviter les problèmes SSR
+    if (typeof window === 'undefined') {
+      return {
+        totalViews: 0,
+        totalConversions: 0,
+        conversionRate: 0,
+        variantA: { views: 0, percentage: 0, conversions: 0, conversionRate: 0 },
+        variantB: { views: 0, percentage: 0, conversions: 0, conversionRate: 0 },
+      };
+    }
+    return calculateABStats();
+  });
 
   useEffect(() => {
+    // Charger les stats initiales
+    setStats(calculateABStats());
+
     // Mettre à jour les stats toutes les 5 secondes
     const interval = setInterval(() => {
       setStats(calculateABStats());
