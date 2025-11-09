@@ -136,7 +136,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       optinType: meta.optinType,
     });
 
-    trackPixel('Lead', { value: 0, currency: 'EUR' }, { eventID: eventIdRef.current });
+    trackPixel('Lead', { value: 0, currency: 'EUR', optinType: meta.optinType }, { eventID: eventIdRef.current });
     await sendMetaEvent({
       eventName: 'Lead',
       eventId: eventIdRef.current,
@@ -144,6 +144,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       customData: {
         stepId: meta.stepId,
         optinType: meta.optinType,
+        answers,
       },
     });
 
