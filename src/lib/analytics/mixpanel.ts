@@ -44,6 +44,10 @@ export function initMixpanel(): void {
     api_host: process.env.NEXT_PUBLIC_MIXPANEL_API_HOST ?? 'https://api-eu.mixpanel.com',
   });
 
+  if (typeof window !== 'undefined') {
+    window.mixpanel = instance;
+  }
+
   hasInitialized = true;
 }
 
