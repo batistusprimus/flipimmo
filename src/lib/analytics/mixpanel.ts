@@ -72,14 +72,24 @@ export function trackPageView(pathname: string, props?: Record<string, unknown>)
   });
 }
 
+export function trackFormStart(context: Record<string, unknown> = {}): void {
+  trackEvent('form_start', context);
+}
+
 export function trackFormStep(step: number, context: Record<string, unknown> = {}): void {
-  trackEvent('form_step_completed', {
+  const payload = {
     step,
     ...context,
-  });
+  };
+  trackEvent('step_completed', payload);
+  trackEvent('form_step_completed', payload);
 }
 
 export function trackLeadSubmitted(context: Record<string, unknown> = {}): void {
   trackEvent('lead_submitted', context);
+}
+
+export function trackRedirectTyp(context: Record<string, unknown> = {}): void {
+  trackEvent('redirect_typ', context);
 }
 

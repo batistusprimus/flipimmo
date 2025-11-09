@@ -44,6 +44,8 @@ export type ContactStep = StepBase & {
 export type FormStep = SingleChoiceStep | ContactStep;
 
 export type FormWizardConfig = {
+  id?: string;
+  name?: string;
   steps: FormStep[];
   successRedirect?: string;
   rejectRedirect?: string;

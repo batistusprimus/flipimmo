@@ -1,9 +1,15 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { identifyUser, trackFormStep, trackLeadSubmitted } from '@/lib/analytics/mixpanel';
+import {
+  identifyUser,
+  trackFormStart,
+  trackFormStep,
+  trackLeadSubmitted,
+  trackRedirectTyp,
+} from '@/lib/analytics/mixpanel';
 import { trackPixel, trackPixelCustom } from '@/lib/analytics/pixel';
 import { createEventId } from '@/lib/analytics/event-id';
 import { sendMetaEvent } from '@/lib/analytics/capi';
@@ -38,6 +44,13 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
   const [contactErrors, setContactErrors] = useState<Record<string, string>>({});
 
   const eventIdRef = useRef(createEventId('form'));
+  const initialPath = typeof window !== 'undefined' ? window.location.pathname : undefined;
+  const formMetaRef = useRef<{ id: string; name: string; path?: string }>({
+    id: config.id ?? initialPath ?? 'form',
+    name: config.name ?? config.id ?? initialPath ?? 'form',
+    path: initialPath,
+  });
+  const hasTrackedStart = useRef(false);
 
   const stepMap = useMemo<StepMap>(
     () => new Map(steps.map((step) => [step.id, step])),
@@ -85,6 +98,37 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       return nextHistory;
     });
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      formMetaRef.current = {
+        id: config.id ?? path ?? 'form',
+        name: config.name ?? config.id ?? path ?? 'form',
+        path,
+      };
+    } else {
+      formMetaRef.current = {
+        id: config.id ?? 'form',
+        name: config.name ?? config.id ?? 'form',
+        path: undefined,
+      };
+    }
+
+    if (hasTrackedStart.current || steps.length === 0 || stepOrder.length === 0) {
+      return;
+    }
+
+    trackFormStart({
+      eventId: eventIdRef.current,
+      formId: formMetaRef.current.id,
+      formName: formMetaRef.current.name,
+      path: formMetaRef.current.path,
+      firstStepId: stepOrder[0],
+      totalSteps: steps.length,
+    });
+    hasTrackedStart.current = true;
+  }, [config.id, config.name, stepOrder, steps.length]);
 
   const getVariableKey = (step: FormStep) => step.variable ?? step.id;
 
@@ -143,6 +187,9 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       ...answers,
       eventId: eventIdRef.current,
       optinType: meta.optinType,
+      formId: formMetaRef.current.id,
+      formName: formMetaRef.current.name,
+      path: formMetaRef.current.path,
     });
 
     trackPixel(
@@ -172,6 +219,14 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
 
     const redirectTarget = meta.redirect ?? config.successRedirect;
     if (redirectTarget) {
+      trackRedirectTyp({
+        eventId: eventIdRef.current,
+        formId: formMetaRef.current.id,
+        formName: formMetaRef.current.name,
+        path: formMetaRef.current.path,
+        redirect: redirectTarget,
+        stepId: meta.stepId,
+      });
       router.push(redirectTarget);
       return;
     }
@@ -188,6 +243,10 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       stepId: step.id,
       variable: variableKey,
       value: option.value,
+      eventId: eventIdRef.current,
+      formId: formMetaRef.current.id,
+      formName: formMetaRef.current.name,
+      path: formMetaRef.current.path,
     });
     trackPixelCustom(
       'FormStep',
@@ -255,6 +314,10 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       stepId: step.id,
       variable: key,
       value: 'submitted',
+      eventId: eventIdRef.current,
+      formId: formMetaRef.current.id,
+      formName: formMetaRef.current.name,
+      path: formMetaRef.current.path,
     });
     trackPixelCustom(
       'FormStep',
