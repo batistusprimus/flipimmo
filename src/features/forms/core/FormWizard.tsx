@@ -42,6 +42,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
   const [currentStepId, setCurrentStepId] = useState<string | null>(() => (steps.length > 0 ? steps[0].id : null));
   const [outcome, setOutcome] = useState<FormOutcome | null>(null);
   const [contactErrors, setContactErrors] = useState<Record<string, string>>({});
+  const [trustedCount, setTrustedCount] = useState(182);
 
   const eventIdRef = useRef(createEventId('form'));
   const initialPath = typeof window !== 'undefined' ? window.location.pathname : undefined;
@@ -76,6 +77,33 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
 
   const currentIndex = stepOrder.indexOf(currentStepId);
   const canGoBack = history.length > 1;
+  const totalSteps = stepOrder.length;
+  const progress = totalSteps > 0 ? Math.round(((currentIndex + 1) / totalSteps) * 100) : 0;
+  useEffect(() => {
+    const target = 267;
+    const base = 182;
+    const duration = 1200;
+    let frame = 0;
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      const eased = Math.min(elapsed / duration, 1);
+      const value = Math.round(base + (target - base) * easeOutCubic(eased));
+      setTrustedCount(value);
+      if (eased < 1) {
+        frame = requestAnimationFrame(tick);
+      }
+    };
+
+    setTrustedCount(base);
+    frame = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(frame);
+    };
+  }, [currentStepId]);
+
 
   const goToStep = (stepId: string) => {
     if (stepId === currentStepId) return;
@@ -300,6 +328,18 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       if (field.required && !value) {
         errors[field.name] = 'Champ obligatoire';
       }
+
+      if (!errors[field.name] && isPhoneField(field)) {
+        if (!isValidFrenchPhone(value ?? '')) {
+          errors[field.name] = 'Merci de saisir un numéro de téléphone français valide';
+        }
+      }
+
+      if (!errors[field.name] && isEmailField(field)) {
+        if (!isValidEmail(value ?? '')) {
+          errors[field.name] = 'Merci de saisir une adresse email valide';
+        }
+      }
     });
 
     if (Object.keys(errors).length > 0) {
@@ -351,81 +391,108 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
 
   return (
     <div className={className}>
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-md">
-        <header className="mb-6 text-center">
-          <div className="mb-2 text-sm font-medium text-slate-500">
-            Étape {currentIndex + 1} sur {steps.length}
+      <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-xl ring-1 ring-slate-100">
+        <header className="mb-8">
+          <div className="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-[#1E3A8A]/70">
+            <span>Progression</span>
+            <span>{progress}%</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">{currentStep.title}</h1>
-          {currentStep.subtitle ? <p className="mt-2 text-slate-600">{currentStep.subtitle}</p> : null}
+          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#f59e0b] via-[#f59e0b] to-[#fb923c] transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="mt-6 text-center">
+            <h1 className="text-2xl font-bold text-[#1E3A8A]">{currentStep.title}</h1>
+            {currentStep.subtitle ? <p className="mt-2 text-sm text-slate-600">{currentStep.subtitle}</p> : null}
+          </div>
         </header>
 
         {currentStep.kind === 'single-choice' ? (
-          <div className="space-y-3">
-            {currentStep.options.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => {
-                  void handleOptionSelect(currentStep, option);
-                }}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-slate-900 hover:bg-slate-50"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-base font-medium text-slate-900">{option.label}</span>
-                  <span className="text-sm text-slate-400">→</span>
-                </div>
-                {option.description ? <p className="mt-1 text-sm text-slate-500">{option.description}</p> : null}
-              </button>
-            ))}
-          </div>
+          <>
+            <div className="space-y-3">
+              {currentStep.options.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    void handleOptionSelect(currentStep, option);
+                  }}
+                  className="group w-full rounded-2xl border border-slate-100 bg-white px-5 py-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[#f59e0b]/60 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f59e0b]/40"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-base font-semibold text-[#1E3A8A]">{option.label}</span>
+                    <span className="text-sm font-semibold text-[#f59e0b] transition group-hover:translate-x-1">
+                      →
+                    </span>
+                  </div>
+                  {option.description ? (
+                    <p className="mt-1 text-sm text-slate-500">{option.description}</p>
+                  ) : null}
+                </button>
+              ))}
+            </div>
+            <TrustedCounter trustedCount={trustedCount} />
+          </>
         ) : null}
 
         {currentStep.kind === 'contact' ? (
-          <form
-            className="space-y-4"
-            onSubmit={(event) => {
-              event.preventDefault();
-              void handleContactSubmit(currentStep);
-            }}
-          >
-            {currentStep.fields.map((field) => {
-              const key = getVariableKey(currentStep);
-              const contactData = (answers[key] as Record<string, string>) ?? {};
-              const value = contactData[field.name] ?? '';
-              const error = contactErrors[field.name];
-              return (
-                <div key={field.name}>
-                  <label className="block text-sm font-medium text-slate-700">{field.label}</label>
-                  <input
-                    name={field.name}
-                    type={field.type ?? 'text'}
-                    autoComplete={field.autoComplete}
-                    placeholder={field.placeholder}
-                    value={value}
-                    onChange={(event) => handleContactChange(currentStep, field.name, event.target.value)}
-                    className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20"
-                    required={field.required}
-                  />
-                  {error ? <p className="mt-1 text-sm text-red-500">{error}</p> : null}
-                </div>
-              );
-            })}
-
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-slate-900 py-3 text-base font-semibold text-white transition hover:bg-slate-800"
+          <>
+            <form
+              className="space-y-4"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void handleContactSubmit(currentStep);
+              }}
             >
-              {currentStep.submitLabel ?? 'Envoyer'}
-            </button>
-          </form>
+              {currentStep.fields.map((field) => {
+                const key = getVariableKey(currentStep);
+                const contactData = (answers[key] as Record<string, string>) ?? {};
+                const value = contactData[field.name] ?? '';
+                const error = contactErrors[field.name];
+                const inputProps = buildInputValidationProps(field);
+                return (
+                  <div key={field.name}>
+                    <label className="block text-sm font-semibold uppercase tracking-wide text-[#1E3A8A]/80">
+                      {field.label}
+                    </label>
+                    <input
+                      name={field.name}
+                      type={field.type ?? 'text'}
+                      autoComplete={field.autoComplete}
+                      placeholder={field.placeholder}
+                      value={value}
+                      onChange={(event) => handleContactChange(currentStep, field.name, event.target.value)}
+                      className={`mt-1 w-full rounded-xl border bg-white px-3 py-2 text-slate-900 shadow-sm transition focus:outline-none focus:ring-2 ${
+                        error
+                          ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30'
+                          : 'border-slate-200 focus:border-[#f59e0b] focus:ring-[#f59e0b]/30'
+                      }`}
+                      required={field.required}
+                      {...inputProps}
+                    />
+                    {error ? <p className="mt-1 text-sm text-red-500">{error}</p> : null}
+                  </div>
+                );
+              })}
+
+              <button
+                type="submit"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#f59e0b] py-3 text-base font-semibold text-white shadow-lg transition hover:translate-y-[-2px] hover:bg-[#f97316]"
+              >
+                {currentStep.submitLabel ?? 'Envoyer'}
+              </button>
+            </form>
+            <TrustedCounter trustedCount={trustedCount} />
+          </>
         ) : null}
 
         {canGoBack ? (
           <button
             type="button"
             onClick={goBack}
-            className="mt-6 text-sm font-medium text-slate-500 underline underline-offset-4"
+            className="mt-8 text-sm font-semibold text-[#1E3A8A] underline underline-offset-4 transition hover:text-[#f59e0b]"
           >
             ← Retour
           </button>
@@ -455,6 +522,61 @@ function buildMetaUserData(contact: Record<string, string>) {
     fn: contact.firstName,
     ln: contact.lastName,
   };
+}
+
+function isPhoneField(field: ContactStep['fields'][number]) {
+  return field.type === 'tel' || field.name.toLowerCase().includes('phone') || field.name.toLowerCase().includes('tel');
+}
+
+function isEmailField(field: ContactStep['fields'][number]) {
+  return field.type === 'email' || field.name.toLowerCase().includes('email');
+}
+
+function isValidFrenchPhone(value: string) {
+  const normalized = value.replace(/[\s.-]/g, '');
+  const phoneRegex = /^(?:\+33|0)[1-9]\d{8}$/;
+  return phoneRegex.test(normalized);
+}
+
+function isValidEmail(value: string) {
+  const emailRegex =
+    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  return emailRegex.test(value.trim());
+}
+
+function buildInputValidationProps(field: ContactStep['fields'][number]) {
+  if (isPhoneField(field)) {
+    return {
+      inputMode: 'tel' as const,
+      pattern: '^((\\+33|0)[1-9](?:[ .-]?\\d{2}){4})$',
+      title: 'Format attendu : 06 12 34 56 78 ou +33 6 12 34 56 78',
+    };
+  }
+  if (isEmailField(field)) {
+    return {
+      inputMode: 'email' as const,
+      spellCheck: false,
+      autoCapitalize: 'none' as const,
+    };
+  }
+  return {};
+}
+
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+type TrustedCounterProps = {
+  trustedCount: number;
+};
+
+function TrustedCounter({ trustedCount }: TrustedCounterProps) {
+  return (
+    <div className="mt-8 flex items-center justify-center rounded-2xl bg-[#1E3A8A]/5 px-5 py-4 text-center text-sm font-semibold text-[#1E3A8A]">
+      <span className="text-base font-extrabold text-[#f59e0b]">{trustedCount}</span>
+      <span className="ml-2">Marchands de Biens nous ont fait confiance en Octobre 2025</span>
+    </div>
+  );
 }
 
 
