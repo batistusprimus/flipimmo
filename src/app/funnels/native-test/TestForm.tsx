@@ -11,13 +11,34 @@ import { nativeTestFormConfig } from './config';
 const FORM_NAME = 'FlipImmoNativeForm';
 const FORM_SOURCE = 'native-test-funnel';
 
-function buildLeadPayload({ answers, contact, eventId, stepId, optinType }: FormLeadPayload) {
+function stringValue(value: unknown): string {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string') return value;
+  return String(value);
+}
+
+function buildLeadPayload({ answers, contact, eventId, stepId, optinType, pageUrl, referrer, userAgent, searchParams }: FormLeadPayload) {
   const flattenedContact = {
-    first_name: contact.firstName ?? '',
-    postal_code: contact.postalCode ?? '',
-    phone: contact.phone ?? '',
-    email: contact.email ?? '',
-    last_name: contact.lastName ?? '',
+    first_name: stringValue(contact.firstName),
+    last_name: stringValue(contact.lastName),
+    postal_code: stringValue(contact.postalCode),
+    phone: stringValue(contact.phone),
+    email: stringValue(contact.email),
+  };
+
+  const normalizedAnswers = {
+    mdb_status: stringValue(answers.mdb_status),
+    transactions: stringValue(answers.transactions),
+    objective: stringValue(answers.objective),
+    situation: stringValue(answers.situation),
+    timeline: stringValue(answers.timeline),
+    capital: stringValue(answers.capital),
+    primary_need: stringValue(answers.primary_need),
+    difficulty: stringValue(answers.difficulty),
+    high_need: stringValue(answers.high_need),
+    high_capital: stringValue(answers.high_capital),
+    formation_reason: stringValue(answers.formation_reason),
+    cpf_status: stringValue(answers.cpf_status),
   };
 
   return {
@@ -26,21 +47,17 @@ function buildLeadPayload({ answers, contact, eventId, stepId, optinType }: Form
     event_id: eventId,
     step_id: stepId,
     optin_type: optinType ?? 'standard',
-    answers,
+    optin_page: stepId,
+    answers: normalizedAnswers,
     answers_json: JSON.stringify(answers),
+    page_url: pageUrl ?? '',
+    parent_url: pageUrl ?? '',
+    referrer: referrer ?? '',
+    user_agent: userAgent ?? '',
+    query_string: searchParams ?? '',
+    submitted_at: new Date().toISOString(),
     ...flattenedContact,
-    mdb_status: answers.mdb_status,
-    transactions: answers.transactions,
-    objective: answers.objective,
-    situation: answers.situation,
-    timeline: answers.timeline,
-    capital: answers.capital,
-    primary_need: answers.primary_need,
-    difficulty: answers.difficulty,
-    high_need: answers.high_need,
-    high_capital: answers.high_capital,
-    formation_reason: answers.formation_reason,
-    cpf_status: answers.cpf_status,
+    ...normalizedAnswers,
   };
 }
 
@@ -65,9 +82,3 @@ export default function TestForm() {
     />
   );
 }
-
-'use client';
-
-import { useCallback } from 'react';
-
-

@@ -122,12 +122,21 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
         lastName: contactData.lastName,
       });
     }
+    const pageUrl = typeof window !== 'undefined' ? window.location.href : undefined;
+    const searchParams = typeof window !== 'undefined' ? window.location.search : undefined;
+    const referrer = typeof document !== 'undefined' ? document.referrer : undefined;
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : undefined;
+
     await onSubmitLead?.({
       answers,
       eventId: eventIdRef.current,
       contact: contactData,
       stepId: meta.stepId,
       optinType: meta.optinType,
+      pageUrl,
+      referrer,
+      userAgent,
+      searchParams,
     });
 
     trackLeadSubmitted({
@@ -136,7 +145,17 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       optinType: meta.optinType,
     });
 
-    trackPixel('Lead', { value: 0, currency: 'EUR', optinType: meta.optinType }, { eventID: eventIdRef.current });
+    trackPixel(
+      'Lead',
+      {
+        value: 0,
+        currency: 'EUR',
+        optinType: meta.optinType,
+        pageUrl,
+        referrer,
+      },
+      { eventID: eventIdRef.current },
+    );
     await sendMetaEvent({
       eventName: 'Lead',
       eventId: eventIdRef.current,
@@ -145,6 +164,9 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
         stepId: meta.stepId,
         optinType: meta.optinType,
         answers,
+        pageUrl,
+        referrer,
+        searchParams,
       },
     });
 

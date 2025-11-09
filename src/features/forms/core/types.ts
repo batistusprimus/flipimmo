@@ -57,6 +57,10 @@ export type FormLeadPayload = {
   contact: Record<string, string>;
   stepId: string;
   optinType?: string;
+  pageUrl?: string;
+  referrer?: string;
+  userAgent?: string;
+  searchParams?: string;
 };
 
 export type FormRejectPayload = {
