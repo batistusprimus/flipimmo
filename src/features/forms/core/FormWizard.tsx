@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { trackFormStep, trackLeadSubmitted } from '@/lib/analytics/mixpanel';
+import { identifyUser, trackFormStep, trackLeadSubmitted } from '@/lib/analytics/mixpanel';
 import { trackPixel, trackPixelCustom } from '@/lib/analytics/pixel';
 import { createEventId } from '@/lib/analytics/event-id';
 import { sendMetaEvent } from '@/lib/analytics/capi';
@@ -111,6 +111,14 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
     }
 
     const contactData = extractContactData(steps, answers);
+    if (contactData.email || contactData.phone) {
+      identifyUser(contactData.email ?? contactData.phone ?? eventIdRef.current, {
+        email: contactData.email,
+        phone: contactData.phone,
+        firstName: contactData.firstName,
+        lastName: contactData.lastName,
+      });
+    }
     await onSubmitLead?.({
       answers,
       eventId: eventIdRef.current,
