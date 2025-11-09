@@ -16,6 +16,28 @@ function LandingPageContent() {
   const searchParams = useSearchParams();
   const variant = useLandingABTracking(searchParams.get('v'));
   
+  // Charge le script LeadCapture
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Injecte le token
+    (window as any).form_token = "GLFT-CS0KX7L8X717S68QV365GCMO7II";
+
+    // Injecte le script pixel
+    const script = document.createElement('script');
+    script.src = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js';
+    script.async = true;
+    document.head.appendChild(script);
+
+    return () => {
+      // Nettoyage
+      const existingScript = document.querySelector(`script[src="${script.src}"]`);
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
+  }, []);
+  
   // Écoute des événements de succès du pixel Leadbot pour tracker la conversion
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -116,10 +138,6 @@ function LandingPageContent() {
 
   return (
     <>
-      {/* LeadForms Pixel (exigence: code exact) */}
-      <script async type="text/javascript" src="https://api.useleadbot.com/lead-bots/get-pixel-script.js"></script>
-      <script type="text/javascript">{"window.form_token = \"GLFT-CS0KX7L8X717S68QV365GCMO7II\";"}</script>
-
       <div className="min-h-screen bg-gray-100 py-2 px-3">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-3xl shadow-lg p-3 md:p-5">
