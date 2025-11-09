@@ -15,6 +15,7 @@ import { createEventId } from '@/lib/analytics/event-id';
 import { sendMetaEvent } from '@/lib/analytics/capi';
 
 import type {
+  ContactField,
   ContactStep,
   FormLeadPayload,
   FormOption,
@@ -298,23 +299,34 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
     goToStep(target);
   };
 
-  const handleContactChange = (step: ContactStep, name: string, value: string) => {
+  const handleContactChange = (step: ContactStep, field: ContactField, rawValue: string) => {
     const key = getVariableKey(step);
+    const sanitizedValue = sanitizeContactFieldValue(field, rawValue);
     setAnswers((prev) => {
       const current = (prev[key] as Record<string, string>) ?? {};
       return {
         ...prev,
         [key]: {
           ...current,
-          [name]: value,
+          [field.name]: sanitizedValue,
         },
       };
     });
+    const error = validateContactField(field, sanitizedValue, 'change');
     setContactErrors((prev) => {
-      if (!prev[name]) return prev;
-      const next = { ...prev };
-      delete next[name];
-      return next;
+      if (!error) {
+        if (!prev[field.name]) return prev;
+        const next = { ...prev };
+        delete next[field.name];
+        return next;
+      }
+      if (prev[field.name] === error) {
+        return prev;
+      }
+      return {
+        ...prev,
+        [field.name]: error,
+      };
     });
   };
 
@@ -325,20 +337,9 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
 
     step.fields.forEach((field) => {
       const value = contactData[field.name];
-      if (field.required && !value) {
-        errors[field.name] = 'Champ obligatoire';
-      }
-
-      if (!errors[field.name] && isPhoneField(field)) {
-        if (!isValidFrenchPhone(value ?? '')) {
-          errors[field.name] = 'Merci de saisir un numéro de téléphone français valide';
-        }
-      }
-
-      if (!errors[field.name] && isEmailField(field)) {
-        if (!isValidEmail(value ?? '')) {
-          errors[field.name] = 'Merci de saisir une adresse email valide';
-        }
+      const error = validateContactField(field, value, 'submit');
+      if (error) {
+        errors[field.name] = error;
       }
     });
 
@@ -463,7 +464,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
                       autoComplete={field.autoComplete}
                       placeholder={field.placeholder}
                       value={value}
-                      onChange={(event) => handleContactChange(currentStep, field.name, event.target.value)}
+                      onChange={(event) => handleContactChange(currentStep, field, event.target.value)}
                       className={`mt-1 w-full rounded-xl border bg-white px-3 py-2 text-slate-900 shadow-sm transition focus:outline-none focus:ring-2 ${
                         error
                           ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30'
@@ -532,10 +533,13 @@ function isEmailField(field: ContactStep['fields'][number]) {
   return field.type === 'email' || field.name.toLowerCase().includes('email');
 }
 
+function isPostalCodeField(field: ContactStep['fields'][number]) {
+  return field.name.toLowerCase().includes('postal') || field.autoComplete === 'postal-code';
+}
+
 function isValidFrenchPhone(value: string) {
-  const normalized = value.replace(/[\s.-]/g, '');
-  const phoneRegex = /^(?:\+33|0)[1-9]\d{8}$/;
-  return phoneRegex.test(normalized);
+  const phoneRegex = /^0[1-9]\d{8}$/;
+  return phoneRegex.test(value);
 }
 
 function isValidEmail(value: string) {
@@ -544,12 +548,19 @@ function isValidEmail(value: string) {
   return emailRegex.test(value.trim());
 }
 
+function isValidPostalCode(value: string) {
+  const normalized = value.replace(/\s/g, '');
+  const postalRegex = /^\d{5}$/;
+  return postalRegex.test(normalized);
+}
+
 function buildInputValidationProps(field: ContactStep['fields'][number]) {
   if (isPhoneField(field)) {
     return {
-      inputMode: 'tel' as const,
-      pattern: '^((\\+33|0)[1-9](?:[ .-]?\\d{2}){4})$',
-      title: 'Format attendu : 06 12 34 56 78 ou +33 6 12 34 56 78',
+      inputMode: 'numeric' as const,
+      pattern: '^(0[1-9]\\d{8})$',
+      maxLength: 10,
+      title: 'Format attendu : 10 chiffres (ex. 0612345678)',
     };
   }
   if (isEmailField(field)) {
@@ -559,11 +570,69 @@ function buildInputValidationProps(field: ContactStep['fields'][number]) {
       autoCapitalize: 'none' as const,
     };
   }
+  if (isPostalCodeField(field)) {
+    return {
+      inputMode: 'numeric' as const,
+      pattern: '^\\d{5}$',
+      maxLength: 5,
+      title: 'Format attendu : 5 chiffres (ex. 75008)',
+    };
+  }
   return {};
 }
 
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
+}
+
+type ValidationMode = 'change' | 'submit';
+
+function validateContactField(field: ContactField, rawValue: string | undefined, mode: ValidationMode) {
+  const value = typeof rawValue === 'string' ? rawValue.trim() : '';
+
+  if (mode === 'submit' && field.required && !value) {
+    return 'Champ obligatoire';
+  }
+
+  if (!value) {
+    return undefined;
+  }
+
+  if (isPhoneField(field)) {
+    if (value.length !== 10) {
+      return 'Format attendu : 10 chiffres (ex. 0612345678)';
+    }
+    if (!isValidFrenchPhone(value)) {
+      return 'Merci de saisir un numéro de téléphone français valide';
+    }
+  }
+
+  if (isEmailField(field)) {
+    if (!isValidEmail(value)) {
+      return 'Merci de saisir une adresse email valide';
+    }
+  }
+
+  if (isPostalCodeField(field)) {
+    if (value.length !== 5 || !isValidPostalCode(value)) {
+      return 'Merci de saisir un code postal français valide (5 chiffres)';
+    }
+  }
+
+  return undefined;
+}
+
+function sanitizeContactFieldValue(field: ContactField, rawValue: string) {
+  if (isPhoneField(field)) {
+    return rawValue.replace(/\D/g, '').slice(0, 10);
+  }
+  if (isPostalCodeField(field)) {
+    return rawValue.replace(/\D/g, '').slice(0, 5);
+  }
+  if (isEmailField(field)) {
+    return rawValue.trim();
+  }
+  return rawValue;
 }
 
 type TrustedCounterProps = {
