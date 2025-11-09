@@ -37,6 +37,8 @@ export type ContactStep = StepBase & {
   kind: 'contact';
   fields: ContactField[];
   submitLabel?: string;
+  successRedirect?: string;
+  optinType?: string;
 };
 
 export type FormStep = SingleChoiceStep | ContactStep;
@@ -53,6 +55,8 @@ export type FormLeadPayload = {
   answers: FormAnswers;
   eventId: string;
   contact: Record<string, string>;
+  stepId: string;
+  optinType?: string;
 };
 
 export type FormRejectPayload = {

@@ -9,7 +9,7 @@ import { sendToGhlWebhook } from '@/lib/webhooks/ghl';
 import { nativeTestFormConfig } from './config';
 
 export default function TestForm() {
-  const handleLead = useCallback(async ({ answers, contact, eventId }: FormLeadPayload) => {
+  const handleLead = useCallback(async ({ answers, contact, eventId, optinType, stepId }: FormLeadPayload) => {
     const payload = {
       form_name: 'NativeTestForm',
       event_id: eventId,
@@ -17,6 +17,8 @@ export default function TestForm() {
       situation: answers.situation,
       capital: answers.capital,
       timeline: answers.timeline,
+      optin_type: optinType,
+      step_id: stepId,
       ...contact,
     };
 

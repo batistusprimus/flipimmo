@@ -92,7 +92,10 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
     setAnswers((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleOutcome = async (type: FormOutcome, meta: { stepId: string; value?: string }) => {
+  const handleOutcome = async (
+    type: FormOutcome,
+    meta: { stepId: string; value?: string; redirect?: string; optinType?: string },
+  ) => {
     if (type === 'reject') {
       await onReject?.({
         answers,
@@ -123,11 +126,14 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       answers,
       eventId: eventIdRef.current,
       contact: contactData,
+      stepId: meta.stepId,
+      optinType: meta.optinType,
     });
 
     trackLeadSubmitted({
       ...answers,
       eventId: eventIdRef.current,
+      optinType: meta.optinType,
     });
 
     trackPixel('Lead', { value: 0, currency: 'EUR' }, { eventID: eventIdRef.current });
@@ -137,11 +143,13 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       userData: buildMetaUserData(contactData),
       customData: {
         stepId: meta.stepId,
+        optinType: meta.optinType,
       },
     });
 
-    if (config.successRedirect) {
-      router.push(config.successRedirect);
+    const redirectTarget = meta.redirect ?? config.successRedirect;
+    if (redirectTarget) {
+      router.push(redirectTarget);
       return;
     }
 
@@ -231,7 +239,11 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       { eventID: eventIdRef.current },
     );
 
-    await handleOutcome('success', { stepId: step.id });
+    await handleOutcome('success', {
+      stepId: step.id,
+      redirect: step.successRedirect,
+      optinType: step.optinType,
+    });
   };
 
   if (outcome) {
