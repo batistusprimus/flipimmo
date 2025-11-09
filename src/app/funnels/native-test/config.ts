@@ -80,8 +80,8 @@ export const nativeTestFormConfig: FormWizardConfig = {
       variable: 'step7_besoin',
       options: [
         { label: 'Me former au métier de marchand de biens', value: 'formation', next: 's11-cpf' },
-        { label: 'Être accompagné pour réaliser ma première opération', value: 'accompagnement', next: 's10-high-capital' },
-        { label: 'Découvrir et échanger avec d’autres professionnels de l’immobilier', value: 'reseau', next: 's10-high-capital' },
+        { label: 'Être accompagné pour réaliser ma première opération', value: 'accompagnement', next: 'optin-standard' },
+        { label: 'Découvrir et échanger avec d’autres professionnels de l’immobilier', value: 'reseau', next: 'optin-standard' },
       ],
     },
     {

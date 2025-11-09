@@ -1,97 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useLandingABTracking } from './hooks';
-import { trackLandingConversion } from './ab-tracking';
 
-declare global {
-  interface Window {
-    flipimmoOnLeadSuccess?: (detail?: unknown) => void;
-  }
-}
+import LandingForm from './LandingForm';
+import { useLandingABTracking } from './hooks';
 
 function LandingPageContent() {
   const searchParams = useSearchParams();
   const variant = useLandingABTracking(searchParams.get('v'));
-  
-  // Charge le script LeadCapture
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    // Injecte le token
-    (window as any).form_token = "GLFT-CS0KX7L8X717S68QV365GCMO7II";
-
-    // Injecte le script pixel
-    const script = document.createElement('script');
-    script.src = 'https://api.useleadbot.com/lead-bots/get-pixel-script.js';
-    script.async = true;
-    document.head.appendChild(script);
-
-    return () => {
-      // Nettoyage
-      const existingScript = document.querySelector(`script[src="${script.src}"]`);
-      if (existingScript) {
-        existingScript.remove();
-      }
-    };
-  }, []);
-  
-  // Écoute des événements de succès du pixel Leadbot pour tracker la conversion
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const handleLeadSuccess = (payload: unknown, source: string) => {
-      trackLandingConversion(variant);
-      if (process.env.NODE_ENV === 'development') {
-        console.log('🎯 Conversion détectée (Leadbot)', { source, payload, variant });
-      }
-    };
-
-    const onMessage = (event: MessageEvent) => {
-      try {
-        const origin = event.origin || '';
-        const data = event.data;
-        const asString =
-          typeof data === 'string' ? data.toLowerCase() : JSON.stringify(data).toLowerCase();
-        const fromLeadbot =
-          origin.includes('useleadbot') ||
-          origin.includes('leadcapture') ||
-          asString.includes('leadbot') ||
-          asString.includes('leadcapture');
-        const isSuccess =
-          asString.includes('success') ||
-          asString.includes('submitted') ||
-          asString.includes('conversion') ||
-          asString.includes('lead_created');
-
-        if (fromLeadbot && isSuccess) {
-          handleLeadSuccess(data, 'postMessage');
-        }
-      } catch {
-        // no-op
-      }
-    };
-
-    const onCustomSuccess = (e: Event) => {
-      handleLeadSuccess((e as CustomEvent).detail, 'customEvent');
-    };
-
-    window.addEventListener('message', onMessage);
-    window.addEventListener('leadcapture:success', onCustomSuccess as EventListener);
-    window.addEventListener('leadbot:success', onCustomSuccess as EventListener);
-
-    // Callback global que le pixel peut invoquer si supporté
-    window.flipimmoOnLeadSuccess = (detail?: unknown) => handleLeadSuccess(detail, 'globalCallback');
-
-    return () => {
-      window.removeEventListener('message', onMessage);
-      window.removeEventListener('leadcapture:success', onCustomSuccess as EventListener);
-      window.removeEventListener('leadbot:success', onCustomSuccess as EventListener);
-      delete window.flipimmoOnLeadSuccess;
-    };
-  }, [variant]);
 
   // Contenu par variante
   const getTitle = () => {
@@ -164,7 +82,7 @@ function LandingPageContent() {
 
             {/* Conteneur d'embed */}
             <div className="mb-4" suppressHydrationWarning>
-              <div id="leadforms-embd-form" suppressHydrationWarning></div>
+              <LandingForm variant={variant} />
             </div>
 
             <div className="mt-8">

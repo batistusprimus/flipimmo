@@ -6,10 +6,15 @@ import { FormWizard } from '@/features/forms/core';
 import type { FormLeadPayload, FormRejectPayload } from '@/features/forms/core';
 import { sendToGhlWebhook } from '@/lib/webhooks/ghl';
 
-import { nativeTestFormConfig } from './config';
+import { trackLandingConversion, type LandingVariant } from './ab-tracking';
+import { landingFormConfig } from './config';
 
-const FORM_NAME = 'FlipImmoNativeForm';
-const FORM_SOURCE = 'native-test-funnel';
+const FORM_NAME = 'FlipImmoLandingForm';
+const FORM_SOURCE_BASE = 'landing-funnel';
+
+type LandingFormProps = {
+  variant: LandingVariant;
+};
 
 function stringValue(value: unknown): string {
   if (value === null || value === undefined) return '';
@@ -18,7 +23,7 @@ function stringValue(value: unknown): string {
 }
 
 function resolveChoiceLabel(variable: string, rawValue: unknown) {
-  const step = nativeTestFormConfig.steps.find(
+  const step = landingFormConfig.steps.find(
     (candidate) => (candidate.variable ?? candidate.id) === variable,
   );
   if (!step || step.kind !== 'single-choice') {
@@ -38,7 +43,7 @@ function buildLeadPayload({
   referrer,
   userAgent,
   searchParams,
-}: FormLeadPayload) {
+}: FormLeadPayload, variant: LandingVariant) {
   const flattenedContact = {
     first_name: stringValue(contact.firstName),
     last_name: stringValue(contact.lastName),
@@ -72,13 +77,12 @@ function buildLeadPayload({
 
   return {
     form_name: FORM_NAME,
-    source: FORM_SOURCE,
+    form_variant: variant,
+    source: `${FORM_SOURCE_BASE}-${variant}`,
     event_id: eventId,
     step_id: stepId,
     optin_type: optinType ?? 'standard',
     optin_page: stepId,
-    answers: normalizedAnswers,
-    answers_json: JSON.stringify(answers),
     page_url: pageUrl ?? '',
     parent_url: pageUrl ?? '',
     referrer: referrer ?? '',
@@ -88,27 +92,36 @@ function buildLeadPayload({
     ...flattenedContact,
     ...normalizedAnswers,
     ...crmAliases,
+    answers: normalizedAnswers,
   };
 }
 
-export default function TestForm() {
-  const handleLead = useCallback(async (payload: FormLeadPayload) => {
-    const body = buildLeadPayload(payload);
-    await sendToGhlWebhook(body);
-  }, []);
+export default function LandingForm({ variant }: LandingFormProps) {
+  const handleLead = useCallback(
+    async (payload: FormLeadPayload) => {
+      const body = buildLeadPayload(payload, variant);
+      await sendToGhlWebhook(body);
+      trackLandingConversion(variant);
+    },
+    [variant],
+  );
 
-  const handleReject = useCallback(async ({ answers, eventId, stepId, value }: FormRejectPayload) => {
-    if (process.env.NODE_ENV !== 'production') {
-      console.info('[native-test] lead non qualifié', { answers, eventId, stepId, value });
-    }
-  }, []);
+  const handleReject = useCallback(
+    async ({ answers, eventId, stepId, value }: FormRejectPayload) => {
+      if (process.env.NODE_ENV !== 'production') {
+        console.info('[landing-form] lead non qualifié', { answers, eventId, stepId, value, variant });
+      }
+    },
+    [variant],
+  );
 
   return (
     <FormWizard
-      config={nativeTestFormConfig}
+      config={landingFormConfig}
       onSubmitLead={handleLead}
       onReject={handleReject}
       className="mx-auto max-w-2xl"
     />
   );
 }
+

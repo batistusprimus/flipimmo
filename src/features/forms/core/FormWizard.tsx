@@ -26,6 +26,12 @@ import type {
   SingleChoiceStep,
 } from './types';
 
+type StepAnswerContext = {
+  step: FormStep;
+  option?: FormOption;
+  value?: unknown;
+};
+
 type FormWizardProps = {
   config: FormWizardConfig;
   onSubmitLead?: (payload: FormLeadPayload) => Promise<void> | void;
@@ -118,6 +124,24 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
     setHistory((prev) => [...prev, stepId]);
   };
 
+  const getStepDisplayValue = ({ step, value, option }: StepAnswerContext): string | undefined => {
+    if (step.kind === 'single-choice') {
+      const optionValue = option ?? step.options.find((candidate) => candidate.value === value);
+      const display = optionValue?.label ?? (typeof value === 'string' ? value : undefined);
+      return display ?? undefined;
+    }
+
+    if (step.kind === 'contact' && value && typeof value === 'object') {
+      return JSON.stringify(value);
+    }
+
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+      return String(value);
+    }
+
+    return undefined;
+  };
+
   const goBack = () => {
     setHistory((prev) => {
       if (prev.length <= 1) return prev;
@@ -200,17 +224,25 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
     const referrer = typeof document !== 'undefined' ? document.referrer : undefined;
     const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : undefined;
 
-    await onSubmitLead?.({
-      answers,
-      eventId: eventIdRef.current,
-      contact: contactData,
-      stepId: meta.stepId,
-      optinType: meta.optinType,
-      pageUrl,
-      referrer,
-      userAgent,
-      searchParams,
-    });
+    if (onSubmitLead) {
+      Promise.resolve(
+        onSubmitLead({
+          answers,
+          eventId: eventIdRef.current,
+          contact: contactData,
+          stepId: meta.stepId,
+          optinType: meta.optinType,
+          pageUrl,
+          referrer,
+          userAgent,
+          searchParams,
+        }),
+      ).catch((error) => {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('[FormWizard] Échec lors de la soumission du lead', error);
+        }
+      });
+    }
 
     trackLeadSubmitted({
       ...answers,
@@ -232,14 +264,13 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       },
       { eventID: eventIdRef.current },
     );
-    await sendMetaEvent({
+    void sendMetaEvent({
       eventName: 'Lead',
       eventId: eventIdRef.current,
       userData: buildMetaUserData(contactData),
       customData: {
         stepId: meta.stepId,
         optinType: meta.optinType,
-        answers,
         pageUrl,
         referrer,
         searchParams,
@@ -272,6 +303,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       stepId: step.id,
       variable: variableKey,
       value: option.value,
+      displayValue: getStepDisplayValue({ step, option, value: option.value }),
       eventId: eventIdRef.current,
       formId: formMetaRef.current.id,
       formName: formMetaRef.current.name,
@@ -279,7 +311,13 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
     });
     trackPixelCustom(
       'FormStep',
-      { stepId: step.id, variable: variableKey, value: option.value, stepNumber },
+      {
+        stepId: step.id,
+        variable: variableKey,
+        value: option.value,
+        displayValue: getStepDisplayValue({ step, option, value: option.value }),
+        stepNumber,
+      },
       { eventID: eventIdRef.current },
     );
 
@@ -355,6 +393,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       stepId: step.id,
       variable: key,
       value: 'submitted',
+      displayValue: getStepDisplayValue({ step, value: answers[key] }),
       eventId: eventIdRef.current,
       formId: formMetaRef.current.id,
       formName: formMetaRef.current.name,
@@ -362,7 +401,13 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
     });
     trackPixelCustom(
       'FormStep',
-      { stepId: step.id, variable: key, value: 'submitted', stepNumber },
+      {
+        stepId: step.id,
+        variable: key,
+        value: 'submitted',
+        displayValue: getStepDisplayValue({ step, value: answers[key] }),
+        stepNumber,
+      },
       { eventID: eventIdRef.current },
     );
 
@@ -508,12 +553,26 @@ function isOutcome(value: string | FormOutcome): value is FormOutcome {
 }
 
 function extractContactData(steps: FormStep[], answers: Record<string, unknown>): Record<string, string> {
-  const contactStep = steps.find((step): step is ContactStep => step.kind === 'contact');
-  if (!contactStep) return {};
-  const key = contactStep.variable ?? contactStep.id;
-  const data = answers[key];
-  if (!data || typeof data !== 'object') return {};
-  return data as Record<string, string>;
+  return steps
+    .filter((step): step is ContactStep => step.kind === 'contact')
+    .reduce<Record<string, string>>((acc, step) => {
+      const key = step.variable ?? step.id;
+      const data = answers[key];
+      if (!data || typeof data !== 'object') {
+        return acc;
+      }
+
+      const contactValues = data as Record<string, unknown>;
+      const merged = { ...acc };
+      Object.entries(contactValues).forEach(([field, value]) => {
+        if (typeof value === 'string') {
+          merged[field] = value;
+        } else if (value != null) {
+          merged[field] = String(value);
+        }
+      });
+      return merged;
+    }, {});
 }
 
 function buildMetaUserData(contact: Record<string, string>) {
