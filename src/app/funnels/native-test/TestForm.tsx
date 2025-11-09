@@ -27,18 +27,19 @@ function buildLeadPayload({ answers, contact, eventId, stepId, optinType, pageUr
   };
 
   const normalizedAnswers = {
-    mdb_status: stringValue(answers.mdb_status),
-    transactions: stringValue(answers.transactions),
-    objective: stringValue(answers.objective),
-    situation: stringValue(answers.situation),
-    delai: stringValue(answers.delai),
-    capital: stringValue(answers.capital),
-    primary_need: stringValue(answers.primary_need),
-    mid_need: stringValue(answers.mid_need),
-    high_need: stringValue(answers.high_need),
-    high_capital: stringValue(answers.high_capital),
-    formation_reason: stringValue(answers.formation_reason),
-    cpf_status: stringValue(answers.cpf_status),
+    step1_mdb: stringValue(answers.step1_mdb),
+    step2_transactions: stringValue(answers.step2_transactions),
+    step3_objective: stringValue(answers.step3_objective),
+    step4_metier: stringValue(answers.step4_metier),
+    step5_delai: stringValue(answers.step5_delai),
+    step6_capital: stringValue(answers.step6_capital),
+    step7_besoin: stringValue(answers.step7_besoin),
+    step71_formation: stringValue(answers.step71_formation),
+    step712_confirmation: stringValue(answers.step712_confirmation),
+    step8_priority: stringValue(answers.step8_priority),
+    step9_high_need: stringValue(answers.step9_high_need),
+    step10_high_capital: stringValue(answers.step10_high_capital),
+    step11_cpf: stringValue(answers.step11_cpf),
   };
 
   return {

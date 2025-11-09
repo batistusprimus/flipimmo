@@ -3,6 +3,204 @@ import type { FormWizardConfig } from '@/features/forms/core';
 export const nativeTestFormConfig: FormWizardConfig = {
   steps: [
     {
+      id: 's1-mdb',
+      kind: 'single-choice',
+      title: 'Êtes-vous déjà marchand de biens ?',
+      variable: 'step1_mdb',
+      options: [
+        { label: 'Oui', value: 'oui', next: 's2-transactions' },
+        { label: 'Non, mais j’y pense sérieusement', value: 'non', next: 's3-objective' },
+      ],
+    },
+    {
+      id: 's2-transactions',
+      kind: 'single-choice',
+      title: 'Combien de transactions avez-vous déjà réalisé ?',
+      variable: 'step2_transactions',
+      options: [
+        { label: 'Aucune', value: 'aucune', next: 's4-metier' },
+        { label: '1 à 3 opérations', value: '1_3', next: 's8-priority' },
+        { label: 'Plus de 3 opérations', value: 'plus_3', next: 's9-high-need' },
+      ],
+    },
+    {
+      id: 's3-objective',
+      kind: 'single-choice',
+      title: 'Vous souhaitez :',
+      variable: 'step3_objective',
+      options: [
+        { label: 'Vivre de l’immobilier', value: 'vivre', next: 's4-metier' },
+        { label: 'Obtenir un complément de revenus', value: 'revenus', next: 's4-metier' },
+        { label: 'Me former au métier avant de me lancer', value: 'formation', next: 's11-cpf' },
+      ],
+    },
+    {
+      id: 's4-metier',
+      kind: 'single-choice',
+      title: 'Quel est votre métier ?',
+      variable: 'step4_metier',
+      options: [
+        { label: 'Salarié (revenus stables)', value: 'salarie', next: 's5-delai' },
+        { label: 'Indépendant ou Entrepreneur', value: 'independant', next: 's5-delai' },
+        { label: 'En reconversion', value: 'reconversion', next: 's5-delai' },
+        { label: 'Autre', value: 'autre', next: 's5-delai' },
+      ],
+    },
+    {
+      id: 's5-delai',
+      kind: 'single-choice',
+      title: 'Quand souhaitez-vous démarrer ?',
+      variable: 'step5_delai',
+      options: [
+        { label: 'Immédiatement', value: 'immediat', next: 's6-capital' },
+        { label: '1 à 3 mois', value: '1_3', next: 's6-capital' },
+        { label: 'Sous 6 mois', value: '6_mois', next: 's6-capital' },
+        { label: 'Plus tard', value: 'plus_tard', next: 's6-capital' },
+      ],
+    },
+    {
+      id: 's6-capital',
+      kind: 'single-choice',
+      title: 'Quel est votre capital de départ ?',
+      variable: 'step6_capital',
+      options: [
+        { label: 'Moins de 10.000 €', value: 'moins_10k', next: 's71-formation' },
+        { label: '10.000 € – 20.000 €', value: '10k_20k', next: 's71-formation' },
+        { label: '20.000 € – 50.000 €', value: '20k_50k', next: 's7-besoin' },
+        { label: '50.000 € – 100.000 €', value: '50k_100k', next: 's7-besoin' },
+        { label: '+100.000 €', value: 'plus_100k', next: 's7-besoin' },
+      ],
+    },
+    {
+      id: 's7-besoin',
+      kind: 'single-choice',
+      title: 'De quoi avez-vous le plus besoin ?',
+      variable: 'step7_besoin',
+      options: [
+        { label: 'Me former au métier de marchand de biens', value: 'formation', next: 's11-cpf' },
+        { label: 'Être accompagné pour réaliser ma première opération', value: 'accompagnement', next: 's10-high-capital' },
+        { label: 'Découvrir et échanger avec d’autres professionnels de l’immobilier', value: 'reseau', next: 's10-high-capital' },
+      ],
+    },
+    {
+      id: 's71-formation',
+      kind: 'single-choice',
+      title: 'Envisagez-vous de vous former au métier de Marchand de Biens ?',
+      variable: 'step71_formation',
+      options: [
+        { label: 'Oui', value: 'oui', next: 's11-cpf' },
+        { label: 'Non', value: 'non', next: 's712-confirmation' },
+      ],
+    },
+    {
+      id: 's712-confirmation',
+      kind: 'single-choice',
+      title: 'Vous êtes sûr ?',
+      variable: 'step712_confirmation',
+      options: [
+        { label: 'Je désire avancer seul', value: 'stop', next: 'reject' },
+        { label: 'Me former est toujours une bonne idée', value: 'formation', next: 's11-cpf' },
+      ],
+    },
+    {
+      id: 's8-priority',
+      kind: 'single-choice',
+      title: 'Quelle est la priorité pour développer votre activité ?',
+      variable: 'step8_priority',
+      options: [
+        { label: 'Structurer mon activité et sécuriser mes prochaines opérations', value: 'structurer', next: 's10-high-capital' },
+        { label: 'Accéder à plus d’opportunités et de financements', value: 'opportunites', next: 's10-high-capital' },
+        { label: 'Rejoindre un réseau de marchands de biens pour collaborer', value: 'reseau', next: 's10-high-capital' },
+      ],
+    },
+    {
+      id: 's9-high-need',
+      kind: 'single-choice',
+      title: 'Qu’est-ce qui vous aiderait le plus aujourd’hui ?',
+      variable: 'step9_high_need',
+      options: [
+        { label: 'Accéder à un flux constant d’opportunités off-market', value: 'flux_opportunites', next: 's10-high-capital' },
+        { label: 'Trouver des investisseurs ou partenaires opérationnels', value: 'investisseurs', next: 's10-high-capital' },
+        { label: 'Déléguer une partie de la prospection/sourcing', value: 'deleguer', next: 's10-high-capital' },
+      ],
+    },
+    {
+      id: 's10-high-capital',
+      kind: 'single-choice',
+      title: 'Quel capital pouvez-vous activer dès maintenant ?',
+      variable: 'step10_high_capital',
+      options: [
+        { label: 'Moins de 50.000 €', value: 'moins_50k', next: 'optin-incubator' },
+        { label: 'Plus de 50.000 €', value: 'plus_50k', next: 'optin-incubator' },
+      ],
+    },
+    {
+      id: 's11-cpf',
+      kind: 'single-choice',
+      title: 'Avez-vous du CPF de disponible ?',
+      variable: 'step11_cpf',
+      options: [
+        { label: 'Oui', value: 'oui', next: 'optin-formation' },
+        { label: 'Non', value: 'non', next: 'optin-formation' },
+        { label: 'Je ne sais pas', value: 'incertain', next: 'optin-formation' },
+      ],
+    },
+    {
+      id: 'optin-formation',
+      kind: 'contact',
+      title: 'Recevez le plan complet du Marchand de Biens',
+      subtitle: 'Un guide 100 % concret pour comprendre le fonctionnement, la fiscalité et les étapes clés d’une première opération.',
+      variable: 'optin_formation',
+      optinType: 'formation',
+      submitLabel: 'Recevoir le plan immédiatement',
+      successRedirect: '/funnels/typ/axio',
+      fields: [
+        { name: 'firstName', label: 'Prénom', placeholder: 'Jean', required: true, autoComplete: 'given-name' },
+        { name: 'postalCode', label: 'Code postal', placeholder: '75008', required: true, autoComplete: 'postal-code' },
+        { name: 'phone', label: 'Téléphone', type: 'tel', placeholder: '06 12 34 56 78', required: true, autoComplete: 'tel' },
+        { name: 'email', label: 'Email', type: 'email', placeholder: 'jean.dupont@email.fr', required: true, autoComplete: 'email' },
+      ],
+    },
+    {
+      id: 'optin-standard',
+      kind: 'contact',
+      title: 'Veuillez entrer vos informations pour obtenir votre plan d’action',
+      subtitle: 'Le plan clair et concret pour comprendre comment les MDB structurent, financent et revendent leurs opérations.',
+      variable: 'optin_standard',
+      optinType: 'standard',
+      submitLabel: 'Voir le résultat',
+      successRedirect: '/funnels/typ/greenbull',
+      fields: [
+        { name: 'firstName', label: 'Prénom', placeholder: 'Jean', required: true, autoComplete: 'given-name' },
+        { name: 'postalCode', label: 'Code postal', placeholder: '75008', required: true, autoComplete: 'postal-code' },
+        { name: 'phone', label: 'Téléphone', type: 'tel', placeholder: '06 12 34 56 78', required: true, autoComplete: 'tel' },
+        { name: 'email', label: 'Email', type: 'email', placeholder: 'jean.dupont@email.fr', required: true, autoComplete: 'email' },
+      ],
+    },
+    {
+      id: 'optin-incubator',
+      kind: 'contact',
+      title: 'Recevez les dernières analyses du marché',
+      subtitle: 'Et obtenez une mise en relation avec un réseau de Marchands de Biens.',
+      variable: 'optin_incubateur',
+      optinType: 'incubateur',
+      submitLabel: 'Valider mon profil',
+      successRedirect: '/funnels/typ/greenbull',
+      fields: [
+        { name: 'firstName', label: 'Prénom', placeholder: 'Jean', required: true, autoComplete: 'given-name' },
+        { name: 'postalCode', label: 'Code postal', placeholder: '75008', required: true, autoComplete: 'postal-code' },
+        { name: 'phone', label: 'Téléphone', type: 'tel', placeholder: '06 12 34 56 78', required: true, autoComplete: 'tel' },
+        { name: 'email', label: 'Email', type: 'email', placeholder: 'jean.dupont@email.fr', required: true, autoComplete: 'email' },
+      ],
+    },
+  ],
+};
+
+import type { FormWizardConfig } from '@/features/forms/core';
+
+export const nativeTestFormConfig: FormWizardConfig = {
+  steps: [
+    {
       id: 'step-mdb',
       kind: 'single-choice',
       title: 'Êtes-vous déjà Marchand de Biens ?',
