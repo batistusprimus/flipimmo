@@ -3,6 +3,7 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import AppProviders from "@/components/providers/AppProviders";
 import Script from "next/script";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://flipimmo.fr"),
@@ -106,11 +107,13 @@ fbq('track', 'PageView');
         <Script id="plausible-init" strategy="afterInteractive">{`
 window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
         `}</Script>
-        <AppProviders>
-          <ClientLayout>
-            <main>{children}</main>
-          </ClientLayout>
-        </AppProviders>
+        <Suspense fallback={null}>
+          <AppProviders>
+            <ClientLayout>
+              <main>{children}</main>
+            </ClientLayout>
+          </AppProviders>
+        </Suspense>
       </body>
     </html>
   );
