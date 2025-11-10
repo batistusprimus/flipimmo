@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Script from "next/script";
 
 import Calculator from "@/components/Calculator";
@@ -27,9 +28,9 @@ export default function Home() {
               <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-[#1E3A8A] to-[#F59E0B] bg-clip-text text-transparent">Devenez Marchand de Biens : Le Guide Complet pour Réussir Votre Première Opération</h1>
               <p className="mt-4 text-slate-600">Formation gratuite complète, outils professionnels et mise en relation avec des experts certifiés.</p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                <a href="#formulaire" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]">
+                <Link href="/funnels/landing" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]">
                   Parler à un Expert
-                </a>
+                </Link>
                 <a href="/formation-gratuite" className="inline-flex items-center justify-center rounded-md border border-[#1E3A8A] bg-white px-5 py-3 text-sm font-semibold text-[#1E3A8A] shadow-sm transition hover:bg-[#1E3A8A]/5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E3A8A]">
                   Télécharger la Formation Gratuite
                 </a>
@@ -164,9 +165,9 @@ export default function Home() {
           <h2 className="text-2xl font-bold text-slate-900">Prêt à Passer à l'Action ?</h2>
           <p className="mt-2 text-slate-600">Chaque grand projet commence par une première étape. La vôtre est à portée de clic.</p>
           <div className="mt-6 flex flex-wrap items-center gap-3 justify-center md:justify-start">
-            <a href="#formulaire" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]">Parler à un Expert
+            <Link href="/funnels/landing" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F59E0B]">Parler à un Expert
               <svg aria-hidden viewBox="0 0 20 20" className="ml-2 h-4 w-4"><path fill="currentColor" d="M12.293 3.293a1 1 0 0 1 1.414 0l4 4A1 1 0 0 1 17 9h-3v6a1 1 0 1 1-2 0V9H9a1 1 0 0 1-.707-1.707l4-4Z"/></svg>
-            </a>
+            </Link>
             <a href="/formation-gratuite" className="inline-flex items-center justify-center rounded-md border border-[#1E3A8A] bg-white px-5 py-3 text-sm font-semibold text-[#1E3A8A] shadow-sm transition hover:bg-[#1E3A8A]/5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1E3A8A]">Télécharger la Formation Gratuite
               <svg aria-hidden viewBox="0 0 20 20" className="ml-2 h-4 w-4"><path fill="currentColor" d="M7 10a1 1 0 0 1 1-1h5.586l-1.293-1.293A1 1 0 0 1 13.707 6.293l3 3a1 1 0 0 1 0 1.414l-3 3A1 1 0 0 1 12.293 12.293L13.586 11H8a1 1 0 0 1-1-1Z"/></svg>
             </a>
@@ -291,7 +292,7 @@ export default function Home() {
               </li>
             </ul>
             <div className="mt-6 flex gap-3">
-              <a href="#formulaire" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">Évaluer mon potentiel</a>
+              <Link href="/funnels/landing" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">Évaluer mon potentiel</Link>
               <a href="#calculateur" className="inline-flex items-center justify-center rounded-md border border-[#1E3A8A] bg-white px-5 py-3 text-sm font-semibold text-[#1E3A8A] shadow-sm transition hover:bg-[#1E3A8A]/5">Tester le calculateur</a>
             </div>
           </div>
@@ -341,7 +342,7 @@ export default function Home() {
             ))}
           </div>
           <div className="mt-6">
-            <a href="#formulaire" className="inline-flex items-center justify-center rounded-md bg-[#1E3A8A] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-110">Recevoir le guide gratuit</a>
+            <Link href="/funnels/landing" className="inline-flex items-center justify-center rounded-md bg-[#1E3A8A] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-110">Recevoir le guide gratuit</Link>
           </div>
         </div>
       </section>
@@ -402,7 +403,7 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 rounded-full border border-[#1E3A8A]/20 bg-white px-3 py-1 text-xs font-medium text-[#1E3A8A] shadow-sm">En 3 étapes</div>
           <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-start">
             <h2 className="text-2xl font-bold text-slate-900">Comment FlipImmo Vous Accompagne vers la Réussite</h2>
-            <a href="#formulaire" className="md:ml-auto inline-flex items-center justify-center whitespace-nowrap rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">Commencer maintenant</a>
+            <Link href="/funnels/landing" className="md:ml-auto inline-flex items-center justify-center whitespace-nowrap rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">Commencer maintenant</Link>
           </div>
           <div className="relative mt-6 md:pl-8">
             <div className="pointer-events-none absolute left-4 top-0 hidden h-full w-px bg-slate-200 md:block" />

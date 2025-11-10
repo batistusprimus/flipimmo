@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const metadata = {
   title: 'Formation Gratuite | FlipImmo',
   description: "Téléchargez le guide complet 2025 pour devenir marchand de biens (PDF).",
@@ -12,7 +14,7 @@ export default function FormationGratuitePage() {
         <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">La Formation Gratuite pour Devenir Marchand de Biens en 2025</h1>
         <p className="mt-3 max-w-3xl text-slate-700">Un guide complet de 742 lignes avec des analyses de marché, des cadres juridiques, des stratégies éprouvées et des études de cas réelles. Tout ce dont vous avez besoin pour comprendre le métier et structurer votre projet.</p>
         <div className="mt-6">
-          <a href="#telechargement" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">Télécharger Maintenant (100% Gratuit)</a>
+          <Link href="/funnels/landing" className="inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">Télécharger Maintenant (100% Gratuit)</Link>
         </div>
       </div>
 

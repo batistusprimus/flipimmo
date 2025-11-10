@@ -75,9 +75,9 @@ export default function Header() {
             </div>
           </div>
         </nav>
-        <a href="/#formulaire" className="hidden md:inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">
+        <Link href="/funnels/landing" className="hidden md:inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">
           Évaluez votre potentiel
-        </a>
+        </Link>
         <button
           type="button"
           className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A8A]"
@@ -135,9 +135,9 @@ export default function Header() {
                   <Link href="/blog" className="block rounded-md px-6 py-2 hover:bg-slate-50">Blog</Link>
                   <Link href="/se-former" className="block rounded-md px-6 py-2 hover:bg-slate-50">Se Former</Link>
                 </div>
-                <a href="/#formulaire" className="mt-2 inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">
+                <Link href="/funnels/landing" className="mt-2 inline-flex items-center justify-center rounded-md bg-[#F59E0B] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95">
                   Évaluez votre potentiel
-                </a>
+                </Link>
               </nav>
             </div>
           </div>
