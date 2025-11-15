@@ -1,4 +1,258 @@
-# Déploiement du formulaire natif FlipImmo
+# Formulaires natifs BPC — Source de vérité
+
+> Ce document est la référence unique pour concevoir, déployer et maintenir les formulaires natifs de toutes les marques du groupe BPC. Il décrit la configuration, l’intégration aux pages marketing, le tracking analytics, la gestion d’A/B tests et l’envoi des leads vers GHL.
+
+---
+
+## 1. Objectifs & périmètre multi-marques
+
+- Remplacer systématiquement toute intégration LeadCapture ou script tiers par le composant `FormWizard` natif.
+- Couvrir l’ensemble des parcours funnel des marques BPC (FlipImmo, BPC Academy, etc.).
+- Normaliser le mapping des réponses (`stepX_*`), des champs contact et des métadonnées avant l’envoi GHL.
+- Offrir un cadre unique pour le tracking Mixpanel, Meta Pixel & CAPI, et pour la gestion des tests A/B.
+- Rendre chaque duplication de formulaire prédictible grâce à un processus documenté et vérifiable.
+
+---
+
+## 2. Gouvernance du référentiel
+
+- **Responsabilité** : toute mise à jour de `FormWizard`, d’un `Form.tsx`, d’un `config.ts` ou des utilitaires GHL doit être reflétée ici.
+- **PR checklist** : l’auteur d’une PR touchant les formulaires doit vérifier que le README reste exact. Si une divergence apparaît, mettre à jour le fichier dans la même PR.
+- **Suivi des marques** : compléter le tableau ci-dessous à chaque nouvelle implémentation ou évolution majeure.
+
+| Marque        | Funnel principal              | Statut             | Particularités                                                |
+|--------------|--------------------------------|--------------------|---------------------------------------------------------------|
+| FlipImmo     | `src/app/funnels/landing`      | ✅ Prod            | A/B actif, redirection `/merci`, tracking complet en place    |
+| BPC Academy  | _à définir_                    | 🚧 Planification   | Opt-in formation spécifique, hooks GrowthBook à valider       |
+| …            | _ajouter ici_                  | _mettre à jour_    | Documenter redirections, alias CRM, variantes créatives       |
+
+---
+
+## 3. Architecture des fichiers
+
+```
+src/app/funnels/<marque>/
+├── config.ts                # Définition du formulaire (FormWizardConfig)
+├── Form.tsx                 # Conteneur client : FormWizard + webhook + tracking
+└── page.tsx                 # Page marketing intégrant le formulaire (et AB tests)
+
+src/app/funnels/native-test/
+├── config.ts                # Sandbox de référence
+├── TestForm.tsx             # Conteneur de test (payload identique aux formulaires prod)
+└── page.tsx                 # Prototype interne pour QA
+
+src/features/forms/core/
+├── FormWizard.tsx           # Composant multi-étapes partagé
+├── types.ts                 # Types et contrats de config
+└── utils/                   # Normalisation valeurs, validations, tracking, GHL
+```
+
+- `native-test` reste la base de duplication pour toute nouvelle marque.
+- Les assets marketing (preuves sociales, textes) doivent vivre dans la page de marque, jamais dans `FormWizard`.
+
+---
+
+## 4. Pré-requis techniques globaux
+
+- Variables d’environnement : `NEXT_PUBLIC_GHL_WEBHOOK_URL`, `NEXT_PUBLIC_MIXPANEL_TOKEN`, `FB_PIXEL_ID` (et config CAPI).
+- `AppProviders` initialise Mixpanel, GrowthBook et Meta Pixel. Ne pas dupliquer ces initialisations côté page.
+- Le webhook GHL doit être configuré pour accepter le JSON documenté au §13.
+- Les accès aux dashboards (`/funnels/analytics/ab-test`, Mixpanel, Pixel Helper) sont nécessaires pour la QA.
+
+---
+
+## 5. Workflow de déploiement standard
+
+1. **Kick-off**
+   - cartographier le funnel existant (scripts tiers, embed, etc.) ;
+   - recenser les opt-ins requis (standard, formation, incubateur…).
+2. **Configuration du formulaire**
+   - dupliquer `src/app/funnels/native-test/config.ts` ;
+   - ajuster steps, conditions et `optinType` (cf. §6).
+3. **Construction du conteneur**
+   - dupliquer `LandingForm.tsx` → `src/app/funnels/<marque>/Form.tsx` ;
+   - mettre à jour `FORM_NAME`, `FORM_SOURCE_BASE`, redirections, tracking (cf. §7).
+4. **Intégration page**
+   - mettre à jour `page.tsx` pour rendre `<Form variant={variant} />` ;
+   - supprimer scripts historiques et veiller au SEO (cf. §8).
+5. **Tracking & A/B**
+   - vérifier les hooks analytics, GrowthBook et Mixpanel ;
+   - configurer/valider le test A/B si la marque en possède un (cf. §9).
+6. **QA complète**
+   - dérouler la checklist (§11), valider GHL et analytics ;
+   - consigner toute particularité dans le tableau §2.
+7. **Release & suivi**
+   - merger, déployer et surveiller les dashboards ;
+   - informer marketing/CRM des événements collectés et des redirections.
+
+---
+
+## 6. Configuration du formulaire (`config.ts`)
+
+### 6.1 Conventions
+
+- `id` des steps : `step<number>_<variable>` (`step2_transactions`, `step7_besoin`, etc.).
+- `variable` sert de clé fonctionnelle exploitable dans les dashboards.
+- `options.value` correspond à la valeur envoyée dans `stepX_*` et utilisée par les équipes métier.
+- `contact` doit préciser `optinType` (`standard`, `formation`, `incubateur`, …) et `successRedirect`.
+
+### 6.2 Structure type
+
+```ts
+import { FormWizardConfig } from '@/features/forms/core/types';
+
+export const marqueFormConfig: FormWizardConfig = {
+  formName: 'BPC Marque – Formulaire',
+  steps: [
+    {
+      id: 'step1_mdb',
+      type: 'single-choice',
+      variable: 'mdb',
+      options: [
+        { label: 'Oui', value: 'oui', next: 'step2_transactions' },
+        { label: 'Non', value: 'non', next: 'step2_transactions' },
+      ],
+    },
+    // …
+    {
+      id: 'contact',
+      type: 'contact',
+      optinType: 'standard',
+      successRedirect: '/merci',
+      fields: ['firstName', 'phone', 'email', 'postalCode'],
+    },
+  ],
+};
+```
+
+### 6.3 Points d’attention
+
+- Vérifier que chaque `next` pointe vers un step existant (ou `undefined` pour terminer).
+- Centraliser les textes marketing dans les pages, pas dans la config.
+- Ajouter les nouveaux champs contact dans `extractContactData` si nécessaire (coordonner avec l’équipe CRM).
+
+---
+
+## 7. Conteneur client (`Form.tsx`)
+
+- Déclarer `FORM_NAME`, `FORM_SOURCE_BASE`, `FORM_ID` si besoin (pour Mixpanel).
+- `buildLeadPayload()` :
+  - construit `flattenedContact` ;
+  - normalise les steps en `stepX_*` ;
+  - ajoute les métadonnées : `form_variant`, `source`, `optin_type`, `optin_page`, `page_url`, `referrer`, `user_agent`, `query_string`, `submitted_at`.
+  - fournit `answers` (objet) et `answers_json` (stringifié) pour audit CRM.
+- `handleLead` : `await sendToGhlWebhook(body)` n’est **pas** bloquant (appel en `void`) ; fire-and-forget + `trackLandingConversion`.
+- `handleReject` : log clair en dev, instrumentation (Sentry) si erreurs récurrentes.
+- Les hooks analytics (`useMixpanel`, `useMetaPixel`, `useLandingABTracking`) sont centralisés ici pour éviter la duplication côté page.
+
+---
+
+## 8. Intégration page (`page.tsx`)
+
+- Retirer toute injection de script tiers (`useleadbot`, `<script>` inline).
+- Rendre `<Form variant={variant} />` à l’endroit souhaité.
+- Conserver/ajuster le SEO : H1/H2, meta tags, schema éventuel.
+- Si test A/B : `const variant = useLandingABTracking({ testId: 'flipimmo_landing' });`
+- Les éléments marketing (héros, témoignages) restent libres mais doivent supporter la présence du formulaire natif sans CLS.
+
+---
+
+## 9. Tracking & analytics
+
+- **Mixpanel**
+  - Événements automatiques : `form_start`, `step_completed`, `form_step_completed`, `lead_submitted`, `redirect_typ`.
+  - Propriétés communes : `eventId`, `formId`, `formName`, `variant`, `path`, `stepId`, `variable`, `value`, `optinType`.
+  - Ne jamais dupliquer ces événements côté page.
+- **Meta Pixel & CAPI**
+  - `Lead` émis dès la soumission avec `eventID` unique (rejoué côté CAPI).
+  - Hashage email/phone géré dans `sendMetaEvent`.
+  - `trackPixelPageView()` rejoué via `AppProviders` sur navigation SPA.
+  - Interdiction d’émettre un second `Lead` sur la page TYP.
+- **A/B testing**
+  - `useLandingABTracking` stocke la conversion par variant (localStorage).
+  - Dashboard `/funnels/analytics/ab-test` = monitoring temps réel (rafraîchi toutes les 5 s).
+  - `trackLandingConversion(variant)` est invoqué lors de la soumission (garde l’historique local).
+- **Autres canaux**
+  - Si ajout (Google Ads, TikTok, etc.), documenter le mapping événementiel ici même.
+
+---
+
+## 10. Expérience & validations (`FormWizard.tsx`)
+
+- Redirection TYP immédiate (`router.push`) pendant que le webhook s’exécute en arrière-plan.
+- Barre de progression native basée sur le nombre de steps (couleurs BPC).
+- Cartouche de preuve sociale (“267 Marchands de Biens…”) affichée sur chaque step ; ajuster le message en fonction de la marque si besoin.
+- `handleContactChange` applique `sanitizeContactFieldValue` :
+  - Téléphone : chiffres, 10 caractères (`^0[1-9]\d{8}$`).
+  - Code postal : chiffres, 5 caractères.
+  - Email : trimming + lowercasing.
+- `validateContactField` fonctionne en `mode = 'change'` et au submit :
+  - Téléphone : “Format attendu : 10 chiffres (ex. 0612345678)”.
+  - Email : “Merci de saisir une adresse email valide”.
+  - Code postal : “Merci de saisir un code postal français valide (5 chiffres)”.
+- Attributs HTML (`pattern`, `inputMode`, `maxLength`, `title`) alignés pour renforcer la validation navigateur.
+- Les erreurs disparaissent dès que la valeur redevient valide.
+
+---
+
+## 11. QA & monitoring
+
+1. Tester chaque parcours (variant A/B inclus) sur desktop & mobile.
+2. Capturer un lead test et vérifier dans GHL :
+   - Métadonnées : `form_name`, `form_variant`, `source`, `optin_type`, `optin_page`, `submitted_at`.
+   - Champs contact : `first_name`, `last_name`, `postal_code`, `phone`, `email`.
+   - Réponses : `step1_mdb`, `step2_transactions`, `step3_objective`, `step4_metier`, `step5_delai`, `step6_capital`, `step7_besoin`, `step71_formation`, `step712_confirmation`, `step8_priority`, `step9_high_need`, `step10_high_capital`, `step11_cpf`.
+   - Copies : `answers`, `answers_json`.
+3. Vérifier la redirection TYP (<1 s) et l’absence d’attente visible.
+4. Contrôler Mixpanel (Live View) et Pixel Helper (un seul `Lead`).
+5. S’assurer qu’aucun webhook GHL ne renvoie d’erreur (logs ou dashboard GHL).
+6. Tester les validations live (téléphone, email, code postal).
+7. Observer l’animation “267 Marchands de Biens…” (valeurs, easing).
+8. Noter toute divergence ou besoin spécifique dans le tableau §2.
+
+---
+
+## 12. Duplication pour une nouvelle marque (checklist)
+
+- [ ] Dupliquer `native-test/config.ts` → `src/app/funnels/<marque>/config.ts` et adapter les steps.
+- [ ] Créer `src/app/funnels/<marque>/Form.tsx` (copie de `LandingForm`) :
+      - mettre à jour `FORM_NAME`, `FORM_SOURCE_BASE`, `successRedirect`, tracking spécifique.
+- [ ] Injecter `<Form variant={variant} />` dans `page.tsx` en supprimant scripts existants.
+- [ ] Ajuster les alias CRM (`source`, `optin_page`, etc.) si la marque diffère.
+- [ ] Mettre à jour le tableau §2 (statut, particularités).
+- [ ] Réaliser la QA complète (§11) + captures (payload GHL, events Mixpanel, Pixel Helper).
+- [ ] Préparer la communication aux équipes marketing/CRM (événements suivis, dashboards).
+- [ ] Commit + push après validation, en mentionnant ce README dans la PR.
+
+---
+
+## 13. Mapping GHL de référence
+
+- **Contact** : `first_name`, `last_name`, `postal_code`, `phone`, `email`.
+- **Réponses normalisées** : `step1_mdb`, `step2_transactions`, `step3_objective`, `step4_metier`, `step5_delai`, `step6_capital`, `step7_besoin`, `step71_formation`, `step712_confirmation`, `step8_priority`, `step9_high_need`, `step10_high_capital`, `step11_cpf`.
+- **Contextes** : `form_name`, `form_variant`, `source`, `optin_type`, `optin_page`, `page_url`, `parent_url`, `referrer`, `user_agent`, `query_string`, `submitted_at`.
+- **Copies** : `answers` (objet), `answers_json` (stringifié).
+
+> Tout changement de mapping doit être validé avec le CRM et documenté ici avant déploiement.
+
+---
+
+## 14. Historique des commits clés
+
+- `5ac05f2` — feat: ajouter tracking Mixpanel sur FormWizard.
+- `8b701d1` — fix: supprimer ancien config native-test.
+- `ea9ebd7` — UI formulaire natif : branding, progression et validations.
+- `b0f36db` — Validation live des champs contact.
+
+Mettre à jour cette liste à chaque évolution majeure impactant le scope.
+
+---
+
+## 15. Notes complémentaires
+
+- Les formulaires restent 100 % configurables via `config.ts` ; aucune logique métier ne doit être codée dans `FormWizard`.
+- Les dépendances externes (Mixpanel, Meta, GrowthBook, GHL) sont partagées par toutes les marques : vérifier les clés avant déploiement.
+- Pour toute question ou besoin d’évolution, se référer à cette documentation puis ouvrir une issue si nécessaire.
 
 > Synthèse complète des actions réalisées le 9 novembre 2025 pour remplacer LeadCapture par la brique formulaire maison et préparer la duplication vers les autres marques.
 
@@ -13,27 +267,6 @@
 
 ---
 
-## 2. Structure créée / modifiée
-
-```
-src/app/funnels/landing/
-├── config.ts                # FormWizardConfig réutilisant la version native
-├── LandingForm.tsx          # Conteneur client : FormWizard + webhook + tracking
-├── page.tsx                 # Remplacement de l'embed LeadCapture par LandingForm
-├── hooks.ts                 # useLandingABTracking & useABStats pour le tracking A/B
-└── ab-tracking.ts           # Fonctions de tracking A/B (vues, conversions, stats)
-
-src/app/funnels/analytics/ab-test/
-└── page.tsx                 # Dashboard des statistiques A/B en temps réel
-
-src/app/funnels/native-test/
-├── config.ts                # FormWizardConfig (id: "native-test", name: "Formulaire natif FlipImmo")
-├── TestForm.tsx             # Alimente GHL avec les libellés humains
-└── page.tsx                 # Mise en page prototypage + branding FlipImmo
-
-src/features/forms/core/
-└── FormWizard.tsx           # Progression, branding, validations temps réel & mapping contact
-```
 
 ---
 
@@ -87,139 +320,23 @@ src/features/forms/core/
 - `extractContactData` fusionne désormais tous les steps contact.
 - Ajout de `displayValue` dans le tracking (sans impacter le webhook).
 - Redirection TYP immédiate (`router.push` non retardé).
-- Barre de progression native (calculée sur la liste des steps) + stylage FlipImmo.
-- Boutons/options remis aux couleurs maison (combo bleu marine / orange, hover states).
-- Bandeau “267 Marchands de Biens…” animé à chaque step (ease-out cubic).
+- Barre de progression native (calculée sur la liste des steps) aux couleurs FlipImmo.
+- Boutons/options et CTA harmonisés (bleu marine / orange, hover states cohérents).
+- Cartouche “267 Marchands de Biens nous ont fait confiance en Octobre 2025” avec compteur animé (ease-out).
 
 ### 4.5 Validation temps réel & normalisation des inputs
 
 Toujours dans `FormWizard.tsx` :
-- `handleContactChange` utilise `sanitizeContactFieldValue` pour ajuster la saisie en direct :
-  - Téléphone : ne garde que les chiffres, limite à 10 caractères (`0XXXXXXXXX`).
-  - Code postal : chiffres uniquement, limite 5.
-  - Email : trimming + désactive les auto-capitalisations.
-- `validateContactField` renvoie immédiatement les erreurs (`mode = 'change'`) :
-  - Téléphone : message “Format attendu : 10 chiffres…” puis “numéro valide” si check regex.
-  - Email : même logique avec message “Merci de saisir une adresse email valide”.
-  - Code postal : message “5 chiffres” si incomplet.
-- Attributs HTML alignés (`pattern`, `inputMode`, `maxLength`, `title`) pour renforcer la validation côté navigateur.
-- Les erreurs sont purgées dès que l’entrée redevient valide (UX sans frottement).
+- `handleContactChange` applique un `sanitizeContactFieldValue` selon le type :
+  - Téléphone : ne conserve que les chiffres, limite à 10 caractères (`0XXXXXXXXX`).
+  - Code postal : chiffres uniquement, limite 5 caractères.
+  - Email : trimming + suppression des capitalisations automatiques.
+- `validateContactField` renvoie l’erreur adéquate dès la saisie (`mode = 'change'`) et au submit :
+  - Téléphone : “Format attendu : 10 chiffres...” puis vérification regex `^0[1-9]\d{8}$`.
+  - Email : message “Merci de saisir une adresse email valide”.
+  - Code postal : “Merci de saisir un code postal français valide (5 chiffres)”.
+- Attributs HTML alignés (`pattern`, `inputMode`, `maxLength`, `title`) pour renforcer la validation navigateur.
+- Les erreurs sont automatiquement purgées lorsque la valeur redevient valide (UX fluide).
 
-### 4.6 Harmonisation du funnel de test
-
-`native-test/TestForm.tsx` :
-- Payload identique à `LandingForm` (même structure `stepX_*`).
-- `config.ts` : routage corrigé (`accompagnement`, `reseau` → `optin-standard`).
-
-### 4.7 Page merci
-
-`src/app/merci/page.tsx` :
-- Suppression du `fbq('track', 'Lead')` injecté côté client pour éviter un doublon avec l’événement émis par `FormWizard`.
-- La page reste purement informative, le tracking Lead est désormais centralisé dans la soumission du formulaire + CAPI.
-
----
-
-## 5. Tracking & analytics
-
-- **Mixpanel**  
-  `form_start`, `form_step_completed`, `lead_submitted`, `redirect_typ` avec `eventId` unique.
-- **Meta Pixel + CAPI**  
-  `Lead` envoyé immédiatement par `FormWizard` (page URL, referrer, optinType, stepId) avec `eventID` unique, sans second `Lead` sur la page TYP.  
-  Le hashage email / phone reste géré dans `sendMetaEvent`.  
-  `trackPixelPageView()` est rejoué sur chaque navigation SPA via `AppProviders`, garantissant les `PageView` sans recharger la page.
-- **A/B Landing**  
-  - `trackLandingConversion(variant)` appelé lors de la soumission pour alimenter les stats locales.
-  - Dashboard disponible sur `/funnels/analytics/ab-test` pour visualiser les métriques en temps réel.
-  - Le hook `useABStats()` récupère les données depuis localStorage et se met à jour automatiquement toutes les 5 secondes.
-  - **Fix (9 nov 2025)** : Initialisation sécurisée du hook avec valeurs par défaut pour éviter les erreurs SSR (commit `f080295`).
-
----
-
-## 6. Vérifications / QA
-
-1. Tester chaque parcours utilisateur (variation A & B).
-2. Vérifier les payloads dans GHL :
-   - Métadonnées principales : `form_name`, `form_variant`, `source`, `optin_type`, `optin_page`, `submitted_at`.
-   - Champs contact : `first_name`, `last_name` (optionnel), `postal_code`, `phone`, `email`.
-   - Réponses normalisées : `step1_mdb`, `step2_transactions`, `step3_objective`, `step4_metier`, `step5_delai`, `step6_capital`, `step7_besoin`, `step71_formation`, `step712_confirmation`, `step8_priority`, `step9_high_need`, `step10_high_capital`, `step11_cpf`.
-   - Copies structurées : `answers` (objet) et `answers_json` (stringifiée) disponibles pour audit.
-3. Confirmer la redirection TYP immédiate (plus de délai de 7 s).
-4. Contrôler les événements Mixpanel / Pixel en dev (console + network).
-5. Vérifier dans le Pixel Helper que la page `merci` n'émet plus de `Lead` supplémentaire (un seul `Lead` doit apparaître lors de la soumission).
-6. **Tester les statistiques A/B** :
-   - Visiter la landing plusieurs fois (avec `?v=a` et `?v=b` ou en navigation privée).
-   - Vérifier le localStorage : `flipimmo_landing_events` et `flipimmo_landing_conversions`.
-   - Consulter le dashboard `/funnels/analytics/ab-test` pour voir les métriques mises à jour.
-   - Confirmer que les stats se rafraîchissent automatiquement toutes les 5 secondes.
-   - Vérifier les logs en dev : `📊 Landing View Tracked` et `✅ Landing Conversion Tracked`.
-7. Contrôler les validations live :
-   - Téléphone : saisie non numérique bloquée, message instantané si < 10 chiffres.
-   - Code postal : 5 chiffres max, erreur immédiate si incomplet.
-   - Email : message "adresse email valide" lors d'un format invalide.
-8. Observer l'animation "267 Marchands de Biens…" à chaque step (compteur doit repartir d'une valeur basse et monter sans à-coups).
-9. Optionnel : vérifier que les webhooks GHL ne retournent pas d'erreur 4xx/5xx.
-
----
-
-## 7. Checklist duplication pour une nouvelle marque
-
-- [ ] Créer `src/app/funnels/<marque>/config.ts` avec les steps adaptés.
-- [ ] Générer `<marque>/Form.tsx` en copiant `LandingForm` :
-      - Mettre à jour `FORM_NAME`, `FORM_SOURCE_BASE`, redirections, tracking spécifique.
-- [ ] Injecter `<Form variant={variant} />` dans la page du funnel (suppression éventuelle de scripts externes).
-- [ ] Ajuster les alias CRM si la marque utilise d’autres champs.
-- [ ] Tester chaque optin (formation / standard / incubateur) et vérifier GHL / analytics.
-- [ ] Commit + push (une fois QA validée).
-
----
-
-## 8. Commandes Git exécutées
-
-### 8.1 Déploiement initial du formulaire natif
-
-```bash
-git status -sb
-git add src/app/funnels/landing/page.tsx \
-        src/app/funnels/native-test/TestForm.tsx \
-        src/app/funnels/native-test/config.ts \
-        src/features/forms/core/FormWizard.tsx \
-        src/app/funnels/landing/LandingForm.tsx \
-        src/app/funnels/landing/config.ts
-git commit -m "Remplacer LeadCapture par formulaire natif et normaliser payloads"
-git push
-```
-
-Commit : `c980d0d Remplacer LeadCapture par formulaire natif et normaliser payloads`.
-
-### 8.2 Correction du système de stats A/B
-
-```bash
-git add src/app/funnels/landing/hooks.ts src/app/funnels/landing/page.tsx
-git commit -m "fix: correction du hook useABStats pour résoudre les problèmes de stats A/B"
-git push
-```
-
-Commit : `f080295 fix: correction du hook useABStats pour résoudre les problèmes de stats A/B`.
-
-**Problème résolu** : Le hook `useABStats()` initialisait le state avec `calculateABStats()` directement, causant des erreurs SSR. Solution : initialisation avec une fonction qui retourne des valeurs par défaut côté serveur, puis chargement des vraies données dans `useEffect`.
-
----
-
-### Notes finales
-
-- Les formulaires restent 100 % configurables via les fichiers `config.ts`.  
-- Les seules dépendances externes sont déjà en place (Mixpanel, Meta, GrowthBook, GHL).  
-- Pour tout nouveau funnel, se baser sur ce README et sur `LandingForm.tsx` comme blueprint.
-
----
-
-## 9. Mapping GHL de référence
-
-Référence rapide des champs envoyés par `LandingForm` / `TestForm` :
-
-- Contact : `first_name`, `last_name`, `postal_code`, `phone`, `email`.
-- Réponses : `step1_mdb`, `step2_transactions`, `step3_objective`, `step4_metier`, `step5_delai`, `step6_capital`, `step7_besoin`, `step71_formation`, `step712_confirmation`, `step8_priority`, `step9_high_need`, `step10_high_capital`, `step11_cpf`.
-- Contextes : `form_name`, `form_variant`, `source`, `optin_type`, `optin_page`, `page_url`, `parent_url`, `referrer`, `user_agent`, `query_string`, `submitted_at`.
-- Copies brutes : `answers`, `answers_json`.
 
 

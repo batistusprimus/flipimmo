@@ -171,7 +171,7 @@ export const nativeTestFormConfig: FormWizardConfig = {
       variable: 'optin_standard',
       optinType: 'standard',
       submitLabel: 'Voir le résultat',
-      successRedirect: '/funnels/typ/greenbull',
+      successRedirect: '/funnels/typ/lareleve',
       fields: [
         { name: 'firstName', label: 'Prénom', placeholder: 'Jean', required: true, autoComplete: 'given-name' },
         { name: 'postalCode', label: 'Code postal', placeholder: '75008', required: true, autoComplete: 'postal-code' },
@@ -187,7 +187,7 @@ export const nativeTestFormConfig: FormWizardConfig = {
       variable: 'optin_incubateur',
       optinType: 'incubateur',
       submitLabel: 'Valider mon profil',
-      successRedirect: '/funnels/typ/greenbull',
+      successRedirect: '/funnels/typ/lareleve',
       fields: [
         { name: 'firstName', label: 'Prénom', placeholder: 'Jean', required: true, autoComplete: 'given-name' },
         { name: 'postalCode', label: 'Code postal', placeholder: '75008', required: true, autoComplete: 'postal-code' },

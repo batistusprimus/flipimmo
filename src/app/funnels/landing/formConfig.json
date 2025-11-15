@@ -3887,7 +3887,7 @@
                }
             ],
             "to_step_id":230218,
-            "redirect_url":"https://www.flipimmo.fr/funnels/typ/greenbull",
+           "redirect_url":"https://www.flipimmo.fr/funnels/typ/lareleve",
             "invisible_recaptcha":false,
             "convertkit_tags":"",
             "gdpr_checkbox_text_color":"",
@@ -4303,7 +4303,7 @@
                }
             ],
             "to_step_id":230218,
-            "redirect_url":"https://www.flipimmo.fr/funnels/typ/greenbull",
+           "redirect_url":"https://www.flipimmo.fr/funnels/typ/lareleve",
             "invisible_recaptcha":false,
             "convertkit_tags":"",
             "gdpr_checkbox_text_color":"",
