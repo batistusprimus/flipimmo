@@ -1,7 +1,38 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+
+import { identifyUser, trackFormStart, trackFormStep, trackLeadSubmitted } from '@/lib/analytics/mixpanel'
+import { createEventId } from '@/lib/analytics/event-id'
+
+const formMeta = {
+  id: 'qualif-form',
+  name: 'QualifForm',
+  firstStepId: 'qualif_step_form',
+}
 
 export default function QualifForm() {
+  const eventIdRef = useRef(createEventId('qualif-form'))
+  const pathRef = useRef<string | undefined>()
+  const hasTrackedStartRef = useRef(false)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      pathRef.current = window.location.pathname
+    }
+    if (hasTrackedStartRef.current) return
+
+    trackFormStart({
+      eventId: eventIdRef.current,
+      formId: formMeta.id,
+      formName: formMeta.name,
+      path: pathRef.current,
+      firstStepId: formMeta.firstStepId,
+      totalSteps: 1,
+    })
+
+    hasTrackedStartRef.current = true
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
@@ -24,6 +55,21 @@ export default function QualifForm() {
       ...payload,
       form_name: 'Parler à un expert - QualifForm',
     }
+    trackFormStep(1, {
+      eventId: eventIdRef.current,
+      formId: formMeta.id,
+      formName: formMeta.name,
+      path: pathRef.current,
+      stepId: formMeta.firstStepId,
+      stepTitle: 'Qualif – Formulaire',
+      values: payload,
+    })
+    identifyUser(payload.email ?? payload.telephone ?? eventIdRef.current, {
+      email: payload.email,
+      phone: payload.telephone,
+      firstName: payload.prenom,
+      lastName: payload.nom,
+    })
     try {
       await fetch('/api/lead-webhook', {
         method: 'POST',
@@ -33,6 +79,14 @@ export default function QualifForm() {
     } catch (err) {
       // noop: on redirige quand même
     } finally {
+      trackLeadSubmitted({
+        ...mapped,
+        eventId: eventIdRef.current,
+        formId: formMeta.id,
+        formName: formMeta.name,
+        path: pathRef.current,
+        stepId: formMeta.firstStepId,
+      })
       window.location.href = '/merci'
     }
   }

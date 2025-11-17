@@ -73,16 +73,21 @@ export function trackPageView(pathname: string, props?: Record<string, unknown>)
 }
 
 export function trackFormStart(context: Record<string, unknown> = {}): void {
-  trackEvent('form_start', context);
+  ['form_started', 'form_start'].forEach((eventName) => {
+    trackEvent(eventName, context);
+  });
 }
 
 export function trackFormStep(step: number, context: Record<string, unknown> = {}): void {
   const payload = {
     step,
+    stepNumber: step,
     ...context,
   };
-  trackEvent('step_completed', payload);
-  trackEvent('form_step_completed', payload);
+
+  ['form_step', 'form_step_completed', 'step_completed'].forEach((eventName) => {
+    trackEvent(eventName, payload);
+  });
 }
 
 export function trackLeadSubmitted(context: Record<string, unknown> = {}): void {

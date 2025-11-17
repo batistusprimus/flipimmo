@@ -1,9 +1,12 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm, FormProvider, useFormContext, type FieldValues } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+
+import { identifyUser, trackFormStart, trackFormStep, trackLeadSubmitted } from '@/lib/analytics/mixpanel'
+import { createEventId } from '@/lib/analytics/event-id'
 
 const step1Schema = z.object({
   capital: z.string().min(1, { message: 'Champ requis' }),
@@ -29,12 +32,20 @@ const step4Schema = z.object({
 const schema = step1Schema.merge(step2Schema).merge(step3Schema).merge(step4Schema)
 type FormValues = z.infer<typeof schema>
 
+const formMeta = {
+  id: 'lead-form',
+  name: 'LeadForm',
+}
+const stepIds = ['lead_step1_situation', 'lead_step2_disponibilite', 'lead_step3_motivation', 'lead_step4_coordonnees'] as const
 const steps = ['Situation financière', 'Disponibilité', 'Motivation & expérience', 'Coordonnées']
 
 export default function LeadForm() {
   const router = useRouter()
   const methods = useForm<FormValues>({ resolver: zodResolver(schema), mode: 'onTouched' })
   const [step, setStep] = useState(0)
+  const eventIdRef = useRef(createEventId('lead-form'))
+  const pathRef = useRef<string | undefined>()
+  const hasTrackedStartRef = useRef(false)
   const fieldsByStep: (keyof FormValues)[][] = [
     ['capital', 'situation'],
     ['temps', 'delai'],
@@ -42,9 +53,44 @@ export default function LeadForm() {
     ['prenom', 'nom', 'email', 'telephone', 'codePostal', 'rgpd'],
   ]
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      pathRef.current = window.location.pathname
+    }
+    if (hasTrackedStartRef.current) return
+
+    trackFormStart({
+      eventId: eventIdRef.current,
+      formId: formMeta.id,
+      formName: formMeta.name,
+      path: pathRef.current,
+      firstStepId: stepIds[0],
+      totalSteps: steps.length,
+    })
+
+    hasTrackedStartRef.current = true
+  }, [])
+
+  const trackStepCompletion = (stepIndex: number) => {
+    const stepId = stepIds[stepIndex]
+    const stepTitle = steps[stepIndex]
+    const values = methods.getValues(fieldsByStep[stepIndex] as any)
+
+    trackFormStep(stepIndex + 1, {
+      eventId: eventIdRef.current,
+      formId: formMeta.id,
+      formName: formMeta.name,
+      path: pathRef.current,
+      stepId,
+      stepTitle,
+      values,
+    })
+  }
+
   const next = async () => {
     const isValid = await methods.trigger(fieldsByStep[step] as any)
     if (!isValid) return
+    trackStepCompletion(step)
     if (step < steps.length - 1) setStep(step + 1)
   }
   const prev = () => setStep((s) => Math.max(0, s - 1))
@@ -64,6 +110,13 @@ export default function LeadForm() {
       form_name: 'LeadForm',
       ...data,
     }
+    trackStepCompletion(step)
+    identifyUser(data.email ?? data.telephone ?? eventIdRef.current, {
+      email: data.email,
+      phone: data.telephone,
+      firstName: data.prenom,
+      lastName: data.nom,
+    })
     try {
       await fetch('/api/lead-webhook', {
         method: 'POST',
@@ -71,6 +124,14 @@ export default function LeadForm() {
         body: JSON.stringify(mapped),
       })
     } catch {}
+    trackLeadSubmitted({
+      ...mapped,
+      eventId: eventIdRef.current,
+      formId: formMeta.id,
+      formName: formMeta.name,
+      path: pathRef.current,
+      stepId: stepIds[step],
+    })
     router.push('/merci')
   }
 
