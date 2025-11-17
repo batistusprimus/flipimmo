@@ -55,7 +55,7 @@ src/features/forms/core/
 ## 4. Pré-requis techniques globaux
 
 - Variables d’environnement : `NEXT_PUBLIC_GHL_WEBHOOK_URL`, `NEXT_PUBLIC_MIXPANEL_TOKEN`, `FB_PIXEL_ID` (et config CAPI).
-- `AppProviders` initialise Mixpanel, GrowthBook et Meta Pixel. Ne pas dupliquer ces initialisations côté page.
+- `AppProviders` initialise Mixpanel et Meta Pixel. Ne pas dupliquer ces initialisations côté page.
 - Le webhook GHL doit être configuré pour accepter le JSON documenté au §13.
 - Les accès aux dashboards (`/funnels/analytics/ab-test`, Mixpanel, Pixel Helper) sont nécessaires pour la QA.
 
@@ -76,8 +76,8 @@ src/features/forms/core/
    - mettre à jour `page.tsx` pour rendre `<Form variant={variant} />` ;
    - supprimer scripts historiques et veiller au SEO (cf. §8).
 5. **Tracking & A/B**
-   - vérifier les hooks analytics, GrowthBook et Mixpanel ;
-   - configurer/valider le test A/B si la marque en possède un (cf. §9).
+   - vérifier les hooks analytics (Mixpanel, Pixel, stockage interne) ;
+   - ajuster la variante A/B côté code si la marque en possède une (cf. §9).
 6. **QA complète**
    - dérouler la checklist (§11), valider GHL et analytics ;
    - consigner toute particularité dans le tableau §2.
@@ -251,7 +251,7 @@ Mettre à jour cette liste à chaque évolution majeure impactant le scope.
 ## 15. Notes complémentaires
 
 - Les formulaires restent 100 % configurables via `config.ts` ; aucune logique métier ne doit être codée dans `FormWizard`.
-- Les dépendances externes (Mixpanel, Meta, GrowthBook, GHL) sont partagées par toutes les marques : vérifier les clés avant déploiement.
+- Les dépendances externes (Mixpanel, Meta, GHL) sont partagées par toutes les marques : vérifier les clés avant déploiement.
 - Pour toute question ou besoin d’évolution, se référer à cette documentation puis ouvrir une issue si nécessaire.
 
 > Synthèse complète des actions réalisées le 9 novembre 2025 pour remplacer LeadCapture par la brique formulaire maison et préparer la duplication vers les autres marques.
@@ -274,7 +274,7 @@ Mettre à jour cette liste à chaque évolution majeure impactant le scope.
 
 - Variables d’environnement déjà en place :  
   `NEXT_PUBLIC_GHL_WEBHOOK_URL`, `NEXT_PUBLIC_MIXPANEL_TOKEN`, `FB_PIXEL_ID` (+ CAPI).
-- AppProviders initialisent Mixpanel / GrowthBook / Meta Pixel (déjà opérationnel).
+- AppProviders initialisent Mixpanel / Meta Pixel (déjà opérationnel).
 - Webhook GHL configuré pour recevoir le JSON standard.
 
 ---

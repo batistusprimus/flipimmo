@@ -37,11 +37,12 @@ type FormWizardProps = {
   onSubmitLead?: (payload: FormLeadPayload) => Promise<void> | void;
   onReject?: (payload: FormRejectPayload) => Promise<void> | void;
   className?: string;
+  analyticsContext?: Record<string, unknown>;
 };
 
 type StepMap = Map<string, FormStep>;
 
-export function FormWizard({ config, onSubmitLead, onReject, className }: FormWizardProps) {
+export function FormWizard({ config, onSubmitLead, onReject, className, analyticsContext }: FormWizardProps) {
   const { steps } = config;
   const router = useRouter();
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
@@ -59,6 +60,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
     path: initialPath,
   });
   const hasTrackedStart = useRef(false);
+  const analyticsExtras = analyticsContext ?? {};
 
   const stepMap = useMemo<StepMap>(
     () => new Map(steps.map((step) => [step.id, step])),
@@ -179,6 +181,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       path: formMetaRef.current.path,
       firstStepId: stepOrder[0],
       totalSteps: steps.length,
+      ...analyticsExtras,
     });
     hasTrackedStart.current = true;
   }, [config.id, config.name, stepOrder, steps.length]);
@@ -251,6 +254,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       formId: formMetaRef.current.id,
       formName: formMetaRef.current.name,
       path: formMetaRef.current.path,
+      ...analyticsExtras,
     });
 
     trackPixel(
@@ -261,6 +265,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
         optinType: meta.optinType,
         pageUrl,
         referrer,
+        ...analyticsExtras,
       },
       { eventID: eventIdRef.current },
     );
@@ -286,6 +291,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
         path: formMetaRef.current.path,
         redirect: redirectTarget,
         stepId: meta.stepId,
+        ...analyticsExtras,
       });
       router.push(redirectTarget);
       return;
@@ -308,6 +314,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       formId: formMetaRef.current.id,
       formName: formMetaRef.current.name,
       path: formMetaRef.current.path,
+      ...analyticsExtras,
     });
     trackPixelCustom(
       'FormStep',
@@ -317,6 +324,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
         value: option.value,
         displayValue: getStepDisplayValue({ step, option, value: option.value }),
         stepNumber,
+        ...analyticsExtras,
       },
       { eventID: eventIdRef.current },
     );
@@ -398,6 +406,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
       formId: formMetaRef.current.id,
       formName: formMetaRef.current.name,
       path: formMetaRef.current.path,
+      ...analyticsExtras,
     });
     trackPixelCustom(
       'FormStep',
@@ -407,6 +416,7 @@ export function FormWizard({ config, onSubmitLead, onReject, className }: FormWi
         value: 'submitted',
         displayValue: getStepDisplayValue({ step, value: answers[key] }),
         stepNumber,
+        ...analyticsExtras,
       },
       { eventID: eventIdRef.current },
     );

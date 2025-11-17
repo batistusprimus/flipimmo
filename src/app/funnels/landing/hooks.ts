@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { 
-  getAssignedVariant, 
-  trackLandingView, 
+import { useEffect, useState } from 'react';
+
+import {
   calculateABStats,
-  type LandingVariant 
+  getAssignedVariant,
+  trackLandingView,
+  type LandingVariant,
 } from './ab-tracking';
 
 /**
@@ -29,11 +30,8 @@ export function useLandingABTracking(urlVariant?: string | null): LandingVariant
   const [variant, setVariant] = useState<LandingVariant>('a');
 
   useEffect(() => {
-    // Assigner ou récupérer la variante
     const assignedVariant = getAssignedVariant(urlVariant);
     setVariant(assignedVariant);
-
-    // Tracker la vue de la landing
     trackLandingView(assignedVariant);
   }, [urlVariant]);
 

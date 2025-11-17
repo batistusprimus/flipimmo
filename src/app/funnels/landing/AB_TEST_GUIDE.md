@@ -267,17 +267,14 @@ Il faudra :
 ## 📞 Support
 
 ### Fichiers à Consulter
-- `/funnels/landing/ab-tracking.ts` : Fonctions de tracking
-- `/funnels/landing/hooks.ts` : Hooks React
-- `/funnels/landing/page.tsx` : Implementation
+- `/funnels/landing/ab-tracking.ts` : Attribution de variante (sessionStorage) + stats locales
+- `/funnels/landing/hooks.ts` : Hook React qui applique la variante et track la vue
+- `/funnels/landing/LandingForm.tsx` : Soumission du lead + tracking Mixpanel/Pixel (avec variante)
 
-### Commandes Utiles
-```javascript
-// Console du navigateur
-calculateABStats()                    // Voir les stats
-clearEvents()                         // Reset les données
-getAssignedVariant()                  // Voir ma variante
-```
+### Raccourcis utiles
+- Forcer une variante : ajouter `?v=a` ou `?v=b` à l’URL (idéal QA/demo)
+- Voir la variante courante : console → `sessionStorage.getItem('flipimmo_landing_variant')`
+- Remettre à zéro le test : console → `clearEvents()`
 
 ---
 

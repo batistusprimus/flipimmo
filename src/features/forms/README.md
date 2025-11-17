@@ -6,9 +6,9 @@ Ce dossier regroupe la brique « formulaire multi-étapes » utilisable sur 
 
 - `core/FormWizard.tsx` : orchestrateur de steps (logique, analytics, envoi final).
 - `core/types.ts` : définition des types de step configurables.
-- `lib/analytics/*` : helpers Mixpanel, GrowthBook, Meta Pixel, CAPI, génération d’`eventId`.
+- `lib/analytics/*` : helpers Mixpanel, Meta Pixel, CAPI, génération d’`eventId`.
 - `lib/webhooks/ghl.ts` : helper pour poster vers un webhook GoHighLevel.
-- `components/providers/AppProviders.tsx` : init Mixpanel, GrowthBook et Meta Pixel + `PageView` sur chaque navigation.
+- `components/providers/AppProviders.tsx` : init Mixpanel et Meta Pixel + `PageView` sur chaque navigation.
 
 ## Variables d’environnement attendues
 
@@ -17,8 +17,6 @@ Ce dossier regroupe la brique « formulaire multi-étapes » utilisable sur 
 | `NEXT_PUBLIC_MIXPANEL_TOKEN` | Token projet Mixpanel |
 | `NEXT_PUBLIC_MIXPANEL_API_HOST` (optionnel) | URL API custom Mixpanel |
 | `NEXT_PUBLIC_MIXPANEL_DEBUG` (optionnel) | `true` pour log en dev |
-| `GROWTHBOOK_CLIENT_KEY` ou `NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY` | Clé client GrowthBook |
-| `GROWTHBOOK_API_HOST` ou `NEXT_PUBLIC_GROWTHBOOK_API_HOST` (optionnel) | CDN GrowthBook alternatif |
 | `NEXT_PUBLIC_FB_PIXEL_ID` ou `FB_PIXEL_ID` | ID Meta Pixel |
 | `FB_ACCESS_TOKEN` | Access token Meta CAPI (System User) |
 | `NEXT_PUBLIC_GHL_WEBHOOK_URL` | Webhook GoHighLevel par défaut |

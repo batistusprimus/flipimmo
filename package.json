@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@growthbook/growthbook-react": "^1.6.2",
     "@hookform/resolvers": "^5.2.1",
     "@vercel/analytics": "^1.5.0",
     "marked": "^15.0.12",

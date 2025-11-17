@@ -120,6 +120,7 @@ export default function LandingForm({ variant }: LandingFormProps) {
       config={landingFormConfig}
       onSubmitLead={handleLead}
       onReject={handleReject}
+      analyticsContext={{ variant }}
       className="mx-auto max-w-2xl"
     />
   );
