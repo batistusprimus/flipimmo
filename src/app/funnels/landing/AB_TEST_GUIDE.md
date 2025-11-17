@@ -55,6 +55,7 @@ http://localhost:3000/funnels/analytics/ab-test
 - ✅ **Vues de la landing** (variante A vs B)
 - ✅ **Total des visites**
 - ✅ **Répartition par variante** (% A vs % B)
+- Propriétés envoyées : `variant`, `lp_variant`, `formVariant`
 
 ### Bientôt
 - ⏳ Conversions par variante
@@ -274,6 +275,7 @@ Il faudra :
 ### Raccourcis utiles
 - Forcer une variante : ajouter `?v=a` ou `?v=b` à l’URL (idéal QA/demo)
 - Voir la variante courante : console → `sessionStorage.getItem('flipimmo_landing_variant')`
+- Dans Mixpanel, filtrer ou comparer sur `lp_variant` (ou `formVariant`)
 - Remettre à zéro le test : console → `clearEvents()`
 
 ---
