@@ -25,7 +25,8 @@ function resolveConfig(overrides?: Partial<LeadProsperConfig>): LeadProsperConfi
   const supplierId =
     overrides?.supplierId ?? process.env.NEXT_PUBLIC_LEADPROSPER_SUPPLIER_ID ?? '96866';
   const key = overrides?.key ?? process.env.NEXT_PUBLIC_LEADPROSPER_KEY ?? 'rlvmfzrmxbl3w6';
-  const action = overrides?.action ?? process.env.NEXT_PUBLIC_LEADPROSPER_ACTION ?? 'test';
+  const action =
+    overrides?.action ?? process.env.NEXT_PUBLIC_LEADPROSPER_ACTION ?? undefined;
 
   if (!campaignId || !supplierId || !key) {
     if (process.env.NODE_ENV !== 'production') {
