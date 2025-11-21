@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 
 import { FormWizard } from '@/features/forms/core';
 import type { FormLeadPayload, FormRejectPayload } from '@/features/forms/core';
+import { replaceEmptyWithKeyword } from '@/lib/utils/empty-values';
 import { sendToGhlWebhook } from '@/lib/webhooks/ghl';
 import { sendToLeadProsper } from '@/lib/webhooks/leadprosper';
 
@@ -49,12 +50,6 @@ function normalizeLandingPageUrl(value: string): string {
   } catch {
     return '';
   }
-}
-
-function pruneEmptyValues<T extends Record<string, unknown>>(input: T): Record<string, unknown> {
-  return Object.fromEntries(
-    Object.entries(input).filter(([, value]) => value !== '' && value !== undefined && value !== null),
-  );
 }
 
 function resolveChoiceLabel(variable: string, rawValue: unknown) {
@@ -158,7 +153,8 @@ function buildLeadProsperPayload(
     step11_cpf: body.step11_cpf,
   };
 
-  return pruneEmptyValues(payload);
+  // Remplacer les valeurs vides par "empty" pour LeadProsper
+  return replaceEmptyWithKeyword(payload);
 }
 
 export default function LandingForm({ variant }: LandingFormProps) {

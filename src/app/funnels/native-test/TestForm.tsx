@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 
 import { FormWizard } from '@/features/forms/core';
 import type { FormLeadPayload, FormRejectPayload } from '@/features/forms/core';
+import { replaceEmptyWithKeyword } from '@/lib/utils/empty-values';
 import { sendToGhlWebhook } from '@/lib/webhooks/ghl';
 
 import { nativeTestFormConfig } from './config';
@@ -70,7 +71,7 @@ function buildLeadPayload({
     capital: normalizedAnswers.step6_capital || normalizedAnswers.step10_high_capital,
   };
 
-  return {
+  const basePayload = {
     form_name: FORM_NAME,
     source: FORM_SOURCE,
     event_id: eventId,
@@ -89,6 +90,9 @@ function buildLeadPayload({
     ...normalizedAnswers,
     ...crmAliases,
   };
+
+  // Remplacer les valeurs vides par "empty" pour compatibilité CRM
+  return replaceEmptyWithKeyword(basePayload);
 }
 
 export default function TestForm() {
