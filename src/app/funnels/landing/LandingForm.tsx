@@ -7,6 +7,7 @@ import type { FormLeadPayload, FormRejectPayload } from '@/features/forms/core';
 import { replaceEmptyWithKeyword } from '@/lib/utils/empty-values';
 import { sendToGhlWebhook } from '@/lib/webhooks/ghl';
 import { sendToLeadProsper } from '@/lib/webhooks/leadprosper';
+import { sendToPulseWebhook } from '@/lib/webhooks/pulse';
 
 import { trackLandingConversion, type LandingVariant } from './ab-tracking';
 import { landingFormConfig } from './config';
@@ -191,7 +192,15 @@ export default function LandingForm({ variant }: LandingFormProps) {
         await sendToGhlWebhook(body);
       } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
-          console.error('[ghl] Erreur lors de l’envoi', error);
+          console.error('[ghl] Erreur lors de l'envoi', error);
+        }
+      }
+
+      try {
+        await sendToPulseWebhook(body);
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('[pulse] Erreur lors de l'envoi', error);
         }
       }
 

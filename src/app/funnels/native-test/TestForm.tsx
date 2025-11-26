@@ -6,6 +6,7 @@ import { FormWizard } from '@/features/forms/core';
 import type { FormLeadPayload, FormRejectPayload } from '@/features/forms/core';
 import { replaceEmptyWithKeyword } from '@/lib/utils/empty-values';
 import { sendToGhlWebhook } from '@/lib/webhooks/ghl';
+import { sendToPulseWebhook } from '@/lib/webhooks/pulse';
 
 import { nativeTestFormConfig } from './config';
 
@@ -99,6 +100,7 @@ export default function TestForm() {
   const handleLead = useCallback(async (payload: FormLeadPayload) => {
     const body = buildLeadPayload(payload);
     await sendToGhlWebhook(body);
+    await sendToPulseWebhook(body);
   }, []);
 
   const handleReject = useCallback(async ({ answers, eventId, stepId, value }: FormRejectPayload) => {
