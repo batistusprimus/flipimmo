@@ -192,7 +192,7 @@ export default function LandingForm({ variant }: LandingFormProps) {
         await sendToGhlWebhook(body);
       } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
-          console.error('[ghl] Erreur lors de l'envoi', error);
+          console.error('[ghl] Erreur envoi', error);
         }
       }
 
@@ -200,7 +200,7 @@ export default function LandingForm({ variant }: LandingFormProps) {
         await sendToPulseWebhook(body);
       } catch (error) {
         if (process.env.NODE_ENV !== 'production') {
-          console.error('[pulse] Erreur lors de l'envoi', error);
+          console.error('[pulse] Erreur envoi', error);
         }
       }
 
